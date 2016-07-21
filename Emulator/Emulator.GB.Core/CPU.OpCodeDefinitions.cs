@@ -41,20 +41,23 @@ namespace Emulator.GB.Core
             _opCodes[0x7c] = () => LoadRegister(ref _a, _h);
             _opCodes[0x7d] = () => LoadRegister(ref _a, _l);
 
+            _opCodes[0x47] = () => LoadRegister(ref _b, _a);
             _opCodes[0x40] = () => LoadRegister(ref _b, _b);
             _opCodes[0x41] = () => LoadRegister(ref _b, _c);
             _opCodes[0x42] = () => LoadRegister(ref _b, _d);
             _opCodes[0x43] = () => LoadRegister(ref _b, _e);
             _opCodes[0x44] = () => LoadRegister(ref _b, _h);
             _opCodes[0x45] = () => LoadRegister(ref _b, _l);
-            
+
+            _opCodes[0x4F] = () => LoadRegister(ref _c, _a);
             _opCodes[0x48] = () => LoadRegister(ref _c, _b);
             _opCodes[0x49] = () => LoadRegister(ref _c, _c);
             _opCodes[0x4A] = () => LoadRegister(ref _c, _d);
             _opCodes[0x4b] = () => LoadRegister(ref _c, _e);
             _opCodes[0x4c] = () => LoadRegister(ref _c, _h);
             _opCodes[0x4d] = () => LoadRegister(ref _c, _l);
-
+            
+			_opCodes[0x57] = () => LoadRegister(ref _d, _a);
             _opCodes[0x50] = () => LoadRegister(ref _d, _b);
             _opCodes[0x51] = () => LoadRegister(ref _d, _c);
             _opCodes[0x52] = () => LoadRegister(ref _d, _d);
@@ -62,6 +65,8 @@ namespace Emulator.GB.Core
             _opCodes[0x54] = () => LoadRegister(ref _d, _h);
             _opCodes[0x55] = () => LoadRegister(ref _d, _l);
 
+
+            _opCodes[0x5F] = () => LoadRegister(ref _e, _a);
             _opCodes[0x58] = () => LoadRegister(ref _e, _b);
             _opCodes[0x59] = () => LoadRegister(ref _e, _c);
             _opCodes[0x5A] = () => LoadRegister(ref _e, _d);
@@ -69,6 +74,8 @@ namespace Emulator.GB.Core
             _opCodes[0x5C] = () => LoadRegister(ref _e, _h);
             _opCodes[0x5D] = () => LoadRegister(ref _e, _l);
 
+
+            _opCodes[0x67] = () => LoadRegister(ref _h, _a);
             _opCodes[0x60] = () => LoadRegister(ref _h, _b);
             _opCodes[0x61] = () => LoadRegister(ref _h, _c);
             _opCodes[0x62] = () => LoadRegister(ref _h, _d);
@@ -76,6 +83,7 @@ namespace Emulator.GB.Core
             _opCodes[0x64] = () => LoadRegister(ref _h, _h);
             _opCodes[0x65] = () => LoadRegister(ref _h, _l);
 
+            _opCodes[0x6F] = () => LoadRegister(ref _l, _a);
             _opCodes[0x68] = () => LoadRegister(ref _l, _b);
             _opCodes[0x69] = () => LoadRegister(ref _l, _c);
             _opCodes[0x6A] = () => LoadRegister(ref _l, _d);
@@ -84,7 +92,7 @@ namespace Emulator.GB.Core
             _opCodes[0x6D] = () => LoadRegister(ref _l, _l);
         }
 
-		protected void InitLoadAddress()
+        protected void InitLoadAddress()
         {
             _opCodes[0x0A] = () => LoadAddress(ref _a, BC);
             _opCodes[0x1A] = () => LoadAddress(ref _a, DE);
