@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Emulator.GB.Interfaces
@@ -24,9 +25,11 @@ namespace Emulator.GB.Interfaces
 
 
         /// <summary>
-        /// Program Counter - Instruction Pointer / Points to the next instruction to be executed in the GB memory
+        /// Program Counter - Instruction Pointer 
+        /// Points to the next instruction to be executed in the GB memory
+        /// Or the address for the Load,...
         /// </summary>
-        short PC { get; }
+        int PC { get; }
 
         /// <summary>
         /// Stack pointer
@@ -51,7 +54,8 @@ namespace Emulator.GB.Interfaces
 
         #region Debugs interface
         void SetMMU(IMMU mmu);
-        void SetRegister(ref byte b, byte value);
+        void SetRegister(Expression<Func<ICpu, byte>> b, byte value);
+        void SetRegister(Expression<Func<ICpu, int>> b, int value);
         #endregion
     }
 }

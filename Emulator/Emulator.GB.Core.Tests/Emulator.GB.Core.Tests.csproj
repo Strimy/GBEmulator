@@ -50,7 +50,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="LD8bits.cs" />
+    <Compile Include="Load\LDAddressTest.cs" />
+    <Compile Include="Mock\AddressReturnedMMU.cs" />
+    <Compile Include="Load\LD8bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,16 +2,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Emulator.GB.Core
 {
-    public class CPU : ICpu
+    public partial class CPU : ICpu
     {
+        #region Private Fields
+        private int _lastOpTime;
+        private IMMU _mmu;
+        private byte _a, _b, _c, _d, _e, _h, _f, _l;
+        #endregion
+
+        #region Registers
         public byte A
         {
-            get;  private set;
+            get
+            {
+                return _a;
+            }
+            private set
+            {
+                _a = value;
+            }
         }
 
         public short AF
@@ -24,7 +40,14 @@ namespace Emulator.GB.Core
 
         public byte B
         {
-            get; private set;
+            get
+            {
+                return _b;
+            }
+            private set
+            {
+                _b = value;
+            }
         }
 
         public short BC
@@ -37,7 +60,14 @@ namespace Emulator.GB.Core
 
         public byte C
         {
-            get; set;
+            get
+            {
+                return _c;
+            }
+            private set
+            {
+                _c = value;
+            }
         }
 
         public bool CarryFlag
@@ -52,7 +82,11 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _d;
+            }
+            private set
+            {
+                _d = value;
             }
         }
 
@@ -68,7 +102,11 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _e;
+            }
+            private set
+            {
+                _e = value;
             }
         }
 
@@ -76,7 +114,11 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _f;
+            }
+            private set
+            {
+                _f = value;
             }
         }
 
@@ -84,7 +126,11 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _h;
+            }
+            private set
+            {
+                _h = value;
             }
         }
 
@@ -108,15 +154,23 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _l;
+            }
+            private set
+            {
+                _l = value;
             }
         }
+        #endregion
 
+        private Action[] _opCodes = new Action[0xFF];
+
+        
         public int LastOpTime
         {
             get
             {
-                throw new NotImplementedException();
+                return _lastOpTime;
             }
         }
 
@@ -124,15 +178,20 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _mmu;
             }
         }
 
-        public short PC
+        private int _pc;
+        public int PC
         {
             get
             {
-                throw new NotImplementedException();
+                return _pc;
+            }
+            private set
+            {
+                _pc = value;
             }
         }
 
@@ -160,24 +219,46 @@ namespace Emulator.GB.Core
             }
         }
 
+        public CPU()
+        {
+            InitializeOpCodes();
+        }
+
         public void Exec(int opCode)
         {
-            throw new NotImplementedException();
+            // Direct array access should be quicker than Dictionary or predicates
+            // Bench for Action overhead
+            _opCodes[opCode]();
         }
 
         public void Init()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SetMMU(IMMU mmu)
         {
-            throw new NotImplementedException();
+            _mmu = mmu;
         }
 
-        public void SetRegister(ref byte b, byte value)
+        public void SetRegister(Expression<Func<ICpu, byte>> inExpr, byte value)
         {
-            throw new NotImplementedException();
+            var expr = (MemberExpression)inExpr.Body;
+            var prop = (PropertyInfo)expr.Member;
+
+            prop = typeof(CPU).GetProperty(prop.Name);
+
+            prop.SetValue(this, value);
+        }
+
+        public void SetRegister(Expression<Func<ICpu, int>> inExpr, int value)
+        {
+            var expr = (MemberExpression)inExpr.Body;
+            var prop = (PropertyInfo)expr.Member;
+
+            prop = typeof(CPU).GetProperty(prop.Name);
+
+            prop.SetValue(this, value);
         }
     }
 }

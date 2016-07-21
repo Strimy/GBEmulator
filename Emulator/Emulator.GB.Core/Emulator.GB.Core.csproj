@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CPU.cs" />
+    <Compile Include="OpCodeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +49,12 @@
       <Project>{cd73c027-bc7d-442d-bef7-36fce13827b6}</Project>
       <Name>Emulator.GB.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CPU.OpCodes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CPU.OpCodeDefinitions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
