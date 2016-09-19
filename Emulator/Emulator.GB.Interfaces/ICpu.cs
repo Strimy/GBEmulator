@@ -55,6 +55,7 @@ namespace Emulator.GB.Interfaces
         #region Debugs interface
         void SetMMU(IMMU mmu);
         void SetRegister(Expression<Func<ICpu, byte>> b, byte value);
+        void SetRegister(Expression<Func<ICpu, short>> b, short value);
         void SetRegister(Expression<Func<ICpu, int>> b, int value);
         #endregion
     }

@@ -19,7 +19,12 @@ namespace Emulator.GB.Core.Tests
 
         public byte ReadByte(int address)
         {
-            return (byte)(address & 0xFF);
+            var h = address & 0xFF00;
+            var l = address & 0x00FF;
+
+            address = h ^ l;
+
+            return (byte)(address);
         }
 
         public int ReadWord(int address)

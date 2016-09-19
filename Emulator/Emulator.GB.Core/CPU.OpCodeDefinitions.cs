@@ -105,8 +105,6 @@ namespace Emulator.GB.Core
             _opCodes[0x5E] = () => LoadAddress(ref _e, HL);
             _opCodes[0x66] = () => LoadAddress(ref _h, HL);
             _opCodes[0x6E] = () => LoadAddress(ref _l, HL);
-
-
         }
 
 		protected void InitLoadImmediateAddress()

@@ -146,7 +146,13 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return (short)(H << 8 | L);
+
+            }
+            private set
+            {
+                H = (byte)(value >> 8 & 0xFF);
+                L = (byte)(value & 0xFF);
             }
         }
 
@@ -242,6 +248,16 @@ namespace Emulator.GB.Core
         }
 
         public void SetRegister(Expression<Func<ICpu, byte>> inExpr, byte value)
+        {
+            var expr = (MemberExpression)inExpr.Body;
+            var prop = (PropertyInfo)expr.Member;
+
+            prop = typeof(CPU).GetProperty(prop.Name);
+
+            prop.SetValue(this, value);
+        }
+
+        public void SetRegister(Expression<Func<ICpu, short>> inExpr, short value)
         {
             var expr = (MemberExpression)inExpr.Body;
             var prop = (PropertyInfo)expr.Member;

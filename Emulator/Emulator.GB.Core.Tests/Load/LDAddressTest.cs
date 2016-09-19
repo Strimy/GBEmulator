@@ -65,12 +65,12 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_AHL()
         {
-            _cpu.SetRegister(c => c.HL, 0x8008);
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
 
-            _cpu.Exec(0x80|0x08);
+            _cpu.Exec(0x7E);
 
             Assert.AreEqual(8, _cpu.LastOpTime);
-            Assert.AreEqual(0x7E, _cpu.HL);            
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.A);            
         }
 
         [TestMethod]
