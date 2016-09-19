@@ -12,6 +12,8 @@ namespace Emulator.GB.Core.Tests
     /// </summary>
     public class AddressReturnedMMU : IMMU
     {
+        Dictionary<int, byte> _mapWrittenAddress = new Dictionary<int, byte>();
+
         public AddressReturnedMMU()
         {
 
@@ -19,6 +21,9 @@ namespace Emulator.GB.Core.Tests
 
         public byte ReadByte(int address)
         {
+            if (_mapWrittenAddress.ContainsKey(address))
+                return _mapWrittenAddress[address];
+
             var h = address >> 8 & 0xFF;
             var l = address & 0x00FF;
 
@@ -36,7 +41,7 @@ namespace Emulator.GB.Core.Tests
 
         public void WriteByte(int address, byte value)
         {
-            throw new NotImplementedException();
+            _mapWrittenAddress[address] = value;
         }
 
         public void WriteWord(int address, int value)

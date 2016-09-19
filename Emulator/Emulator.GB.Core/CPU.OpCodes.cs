@@ -42,5 +42,12 @@ namespace Emulator.GB.Core
             PC += 2; // Read word from PC advances the PCfrom two bytes
             _lastOpTime = 16;
         }
+
+        protected void LoadIntoMemory(int address, byte value)
+        {
+            _mmu.WriteByte(address, value);
+
+            _lastOpTime = 8;
+        }
     }
 }

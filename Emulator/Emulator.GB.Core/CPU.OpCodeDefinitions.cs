@@ -18,6 +18,7 @@ namespace Emulator.GB.Core
             InitLoad8Bits();
             InitLoadRegister8Bits();
             InitLoadAddress();
+            InitLoadIntoMemory();
         }
 
         private void InitLoad8Bits()
@@ -96,9 +97,8 @@ namespace Emulator.GB.Core
         {
             _opCodes[0x0A] = () => LoadAddress(ref _a, BC);
             _opCodes[0x1A] = () => LoadAddress(ref _a, DE);
-            _opCodes[0x7E] = () => LoadAddress(ref _a, HL);
-            _opCodes[0xFA] = () => LoadAddress(ref _a, BC);
 
+            _opCodes[0x7E] = () => LoadAddress(ref _a, HL);
             _opCodes[0x46] = () => LoadAddress(ref _b, HL);
             _opCodes[0x4E] = () => LoadAddress(ref _c, HL);
             _opCodes[0x56] = () => LoadAddress(ref _d, HL);
@@ -110,6 +110,16 @@ namespace Emulator.GB.Core
 		protected void InitLoadImmediateAddress()
         {
 
+        }
+
+        protected void InitLoadIntoMemory()
+        {
+            _opCodes[0x70] = () => LoadIntoMemory(HL, B);
+            _opCodes[0x71] = () => LoadIntoMemory(HL, C);
+            _opCodes[0x72] = () => LoadIntoMemory(HL, D);
+            _opCodes[0x73] = () => LoadIntoMemory(HL, E);
+            _opCodes[0x74] = () => LoadIntoMemory(HL, H);
+            _opCodes[0x75] = () => LoadIntoMemory(HL, L);
         }
     }
 }

@@ -56,6 +56,11 @@ namespace Emulator.GB.Core
             {
                 return (short)(B << 8 | C);
             }
+            private set
+            {
+                B = (byte)(value >> 8 & 0xFF);
+                C = (byte)(value & 0xFF);
+            }
         }
 
         public byte C
@@ -94,7 +99,12 @@ namespace Emulator.GB.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return (short)(D << 8 | E);
+            }
+            private set
+            {
+                D = (byte)(value >> 8 & 0xFF);
+                E = (byte)(value & 0xFF);
             }
         }
 
