@@ -1,13 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.25428.1
+VisualStudioVersion = 15.0.25618.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GB.Core", "Emulator.GB.Core\Emulator.GB.Core.csproj", "{CA39D0D1-763D-436E-99EF-9D59E0CE532A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GB.Core.Tests", "Emulator.GB.Core.Tests\Emulator.GB.Core.Tests.csproj", "{CFFF64E4-0F0B-4BC4-82FC-CAD9FC3307BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GB.Interfaces", "Emulator.GB.Interfaces\Emulator.GB.Interfaces.csproj", "{CD73C027-BC7D-442D-BEF7-36FCE13827B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4481EBC2-0473-463C-96B6-B57008415C92}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\emuprog.pdf = Docs\emuprog.pdf
+		Docs\GBC specs.htm = Docs\GBC specs.htm
+		Docs\gbcprimer.doc = Docs\gbcprimer.doc
+		Docs\GBCPUman.pdf = Docs\GBCPUman.pdf
+		Docs\GBCribSheet000129.pdf = Docs\GBCribSheet000129.pdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
