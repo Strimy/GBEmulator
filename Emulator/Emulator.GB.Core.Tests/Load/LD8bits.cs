@@ -17,7 +17,7 @@ namespace Emulator.GB.Core.Tests
         }
 
         [TestMethod]
-        public void LDAn()
+        public void LD_An()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
@@ -28,7 +28,7 @@ namespace Emulator.GB.Core.Tests
         }
 
         [TestMethod]
-        public void LDBn()
+        public void LD_Bn()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
@@ -39,7 +39,7 @@ namespace Emulator.GB.Core.Tests
         }
 
         [TestMethod]
-        public void LDCn()
+        public void LD_Cn()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
@@ -50,7 +50,7 @@ namespace Emulator.GB.Core.Tests
         }
 
         [TestMethod]
-        public void LDDn()
+        public void LD_Dn()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
@@ -61,7 +61,7 @@ namespace Emulator.GB.Core.Tests
         }
 
         [TestMethod]
-        public void LDEn()
+        public void LD_En()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
@@ -73,7 +73,7 @@ namespace Emulator.GB.Core.Tests
 
 
         [TestMethod]
-        public void LDHn()
+        public void LD_Hn()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
@@ -84,7 +84,7 @@ namespace Emulator.GB.Core.Tests
         }
 
         [TestMethod]
-        public void LDLn()
+        public void LD_Ln()
         {
             _cpu.SetRegister(c => c.PC, 0x42);
 
