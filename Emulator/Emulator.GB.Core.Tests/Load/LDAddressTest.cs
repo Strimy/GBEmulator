@@ -63,6 +63,28 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_ABC()
+        {
+            _cpu.SetRegister(c => c.BC, (short)0x7008);
+
+            _cpu.Exec(0x0A);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.A);
+        }
+
+        [TestMethod]
+        public void LD_ADE()
+        {
+            _cpu.SetRegister(c => c.DE, (short)0x7008);
+
+            _cpu.Exec(0x1A);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.A);
+        }        
+
+        [TestMethod]
         public void LD_AHL()
         {
             _cpu.SetRegister(c => c.HL, (short)0x7008);
@@ -389,6 +411,90 @@ namespace Emulator.GB.Core.Tests.Load
 
             Assert.AreEqual(8, _cpu.LastOpTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.L);
+        }        
+
+        [TestMethod]
+        public void LD_HLB()
+        {
+            _cpu.SetRegister(c => c.B, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x70);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+        }
+
+        [TestMethod]
+        public void LD_HLC()
+        {
+            _cpu.SetRegister(c => c.C, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x71);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+        }
+
+        [TestMethod]
+        public void LD_HLD()
+        {
+            _cpu.SetRegister(c => c.D, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x72);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+        }
+
+        [TestMethod]
+        public void LD_HLE()
+        {
+            _cpu.SetRegister(c => c.E, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x73);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+        }
+
+        [TestMethod]
+        public void LD_HLH()
+        {
+            _cpu.SetRegister(c => c.H, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x74);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+        }
+
+        [TestMethod]
+        public void LD_HLL()
+        {
+            _cpu.SetRegister(c => c.L, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x75);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+        }
+
+        [TestMethod]
+        public void LD_HLn()
+        {
+            _cpu.SetRegister(c => c.PC, (byte)0x38);
+            _cpu.SetRegister(c => c.HL, (short)0x3838);
+
+            _cpu.Exec(0x36);
+
+            Assert.AreEqual(12, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.PC));
         }
 
         private void TestRegisterLoad(int opCode, Expression<Func<ICpu, byte>> source, Func<byte> target)
