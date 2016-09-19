@@ -105,6 +105,12 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_CA()
+        {
+            TestRegisterLoad(0x4F, c => c.A, () => _cpu.C);
+        }
+
+        [TestMethod]
         public void LD_CB()
         {
             TestRegisterLoad(0x48, c => c.B, () => _cpu.C);
@@ -126,6 +132,24 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_CE()
         {
             TestRegisterLoad(0x4B, c => c.E, () => _cpu.C);
+        }
+
+        [TestMethod]
+        public void LD_CH()
+        {
+            TestRegisterLoad(0x4C, c => c.H, () => _cpu.C);
+        }
+
+        [TestMethod]
+        public void LD_CL()
+        {
+            TestRegisterLoad(0x4D, c => c.L, () => _cpu.C);
+        }
+
+        [TestMethod]
+        public void LD_DA()
+        {
+            TestRegisterLoad(0x57, c => c.A, () => _cpu.D);
         }
 
         [TestMethod]
@@ -165,6 +189,12 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_EA()
+        {
+            TestRegisterLoad(0x5F, c => c.A, () => _cpu.E);
+        }
+
+        [TestMethod]
         public void LD_EB()
         {
             TestRegisterLoad(0x58, c => c.B, () => _cpu.E);
@@ -201,6 +231,12 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_HA()
+        {
+            TestRegisterLoad(0x67, c => c.A, () => _cpu.H);
+        }
+
+        [TestMethod]
         public void LD_HB()
         {
             TestRegisterLoad(0x60, c => c.B, () => _cpu.H);
@@ -234,6 +270,12 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HL()
         {
             TestRegisterLoad(0x65, c => c.L, () => _cpu.H);
+        }
+
+        [TestMethod]
+        public void LD_LA()
+        {
+            TestRegisterLoad(0x6F, c => c.A, () => _cpu.L);
         }
 
         [TestMethod]
