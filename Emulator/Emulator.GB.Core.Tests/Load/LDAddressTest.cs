@@ -116,6 +116,17 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_BHL()
+        {
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
+
+            _cpu.Exec(0x46);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.B);
+        }
+
+        [TestMethod]
         public void LD_CA()
         {
             TestRegisterLoad(0x4F, c => c.A, () => _cpu.C);
@@ -155,6 +166,17 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_CL()
         {
             TestRegisterLoad(0x4D, c => c.L, () => _cpu.C);
+        }
+
+        [TestMethod]
+        public void LD_CHL()
+        {
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
+
+            _cpu.Exec(0x4E);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.C);
         }
 
         [TestMethod]
@@ -200,6 +222,17 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_DHL()
+        {
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
+
+            _cpu.Exec(0x56);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.D);
+        }
+
+        [TestMethod]
         public void LD_EA()
         {
             TestRegisterLoad(0x5F, c => c.A, () => _cpu.E);
@@ -239,6 +272,17 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_EL()
         {
             TestRegisterLoad(0x5D, c => c.L, () => _cpu.E);
+        }
+
+        [TestMethod]
+        public void LD_EHL()
+        {
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
+
+            _cpu.Exec(0x5E);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.E);
         }
 
         [TestMethod]
@@ -284,6 +328,17 @@ namespace Emulator.GB.Core.Tests.Load
         }
 
         [TestMethod]
+        public void LD_HHL()
+        {
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
+
+            _cpu.Exec(0x66);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.H);
+        }
+
+        [TestMethod]
         public void LD_LA()
         {
             TestRegisterLoad(0x6F, c => c.A, () => _cpu.L);
@@ -325,6 +380,16 @@ namespace Emulator.GB.Core.Tests.Load
             TestRegisterLoad(0x6D, c => c.L, () => _cpu.L);
         }
 
+        [TestMethod]
+        public void LD_LHL()
+        {
+            _cpu.SetRegister(c => c.HL, (short)0x7008);
+
+            _cpu.Exec(0x6E);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x70 ^ 0x08, _cpu.L);
+        }
 
         private void TestRegisterLoad(int opCode, Expression<Func<ICpu, byte>> source, Func<byte> target)
         {
