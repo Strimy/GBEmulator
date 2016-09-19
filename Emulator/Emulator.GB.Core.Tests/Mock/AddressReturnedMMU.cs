@@ -19,7 +19,7 @@ namespace Emulator.GB.Core.Tests
 
         public byte ReadByte(int address)
         {
-            var h = address & 0xFF00;
+            var h = address >> 8 & 0xFF;
             var l = address & 0x00FF;
 
             address = h ^ l;
