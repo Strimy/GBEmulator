@@ -50,6 +50,8 @@ namespace Emulator.GB.Interfaces
         int LastOpTime { get; }
         void Exec(int opCode);
 
+        byte FetchNextOpCode();
+
         void Init();
 
         #region Debugs interface

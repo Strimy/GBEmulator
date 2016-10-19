@@ -39,7 +39,7 @@ namespace Emulator.GB.Core
             var address = _mmu.ReadWord(PC);
             register = _mmu.ReadByte(address);
 
-            PC += 2; // Read word from PC advances the PCfrom two bytes
+            PC += 2; // Read word from PC advances the PC from two bytes
             _lastOpTime = 16;
         }
 

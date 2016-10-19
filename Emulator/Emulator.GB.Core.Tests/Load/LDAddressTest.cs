@@ -488,13 +488,77 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_HLn()
         {
-            _cpu.SetRegister(c => c.PC, (byte)0x38);
+            _cpu.SetRegister(c => c.PC, 0x38);
             _cpu.SetRegister(c => c.HL, (short)0x3838);
 
             _cpu.Exec(0x36);
 
             Assert.AreEqual(12, _cpu.LastOpTime);
-            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.PC));
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
+            Assert.AreEqual(0x39, _cpu.PC);
+        }
+
+        [TestMethod]
+        public void LD_Ann()
+        {
+            _cpu.SetRegister(c => c.PC, 0x38);
+  
+            _cpu.Exec(0xFA);
+
+            CheckOpTime(16);
+            _cpu.SetRegister(c => c.PC, 0x38);
+            // PC is 0x38, so reading a word gives address 0x3938
+            // The fake MMU is XORing the two bytes
+            Assert.AreEqual(0x39 ^ 0x38, _cpu.A);
+        }
+
+        [TestMethod]
+        public void LD_BCA()
+        {
+            TestLoadIntoMemory(0x02, c => c.A, c => c.BC);
+        }
+
+        [TestMethod]
+        public void LD_DEA()
+        {
+            TestLoadIntoMemory(0x12, c => c.A, c => c.DE);
+        }
+
+        [TestMethod]
+        public void LD_HLA()
+        {
+            TestLoadIntoMemory(0x77, c => c.A, c => c.HL);
+        }
+
+        [TestMethod]
+        public void LD_nnA()
+        {
+            _cpu.SetRegister(c => c.PC, 0x38);
+            _cpu.SetRegister(c => c.A, (byte)0x42);
+
+            _cpu.Exec(0xEA);
+
+            CheckOpTime(16);
+            Assert.AreEqual(0x38 + 2, _cpu.PC);
+
+            _cpu.SetRegister(c => c.PC, 0x38);
+            Assert.AreEqual(0x42, _cpu.MMU.ReadByte(_cpu.MMU.ReadWord(_cpu.PC)));
+        }
+
+        private void TestLoadIntoMemory(int opCode, Expression<Func<ICpu, byte>> registerSource, Expression<Func<ICpu, short>> targetRegisterAddress)
+        {
+            _cpu.SetRegister(registerSource, (byte)0x38);
+            _cpu.SetRegister(targetRegisterAddress, 0x3838);
+
+            _cpu.Exec(opCode);
+
+            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(0x38, _cpu.MMU.ReadByte(targetRegisterAddress.Compile()(_cpu)));
+        }
+
+        private void CheckOpTime(int time)
+        {
+            Assert.AreEqual(time, _cpu.LastOpTime);
         }
 
         private void TestRegisterLoad(int opCode, Expression<Func<ICpu, byte>> source, Func<byte> target)

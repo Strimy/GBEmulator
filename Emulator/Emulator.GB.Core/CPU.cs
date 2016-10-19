@@ -242,10 +242,18 @@ namespace Emulator.GB.Core
 
         public void Exec(int opCode)
         {
+            // Reset the last OpTime, this should be updated by each op code
+            _lastOpTime = 0;
             // Direct array access should be quicker than Dictionary or predicates
             // Bench for Action overhead
             _opCodes[opCode]();
         }
+
+        public byte FetchNextOpCode()
+        {
+            return _mmu.ReadByte(PC++);
+        }
+
 
         public void Init()
         {

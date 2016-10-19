@@ -19,6 +19,7 @@ namespace Emulator.GB.Core
             InitLoadRegister8Bits();
             InitLoadAddress();
             InitLoadIntoMemory();
+            InitLoadImmediateAddress();
         }
 
         private void InitLoad8Bits()
@@ -109,7 +110,7 @@ namespace Emulator.GB.Core
 
 		protected void InitLoadImmediateAddress()
         {
-
+            _opCodes[0xFA] = () => LoadImmediateAddress(ref _a);
         }
 
         protected void InitLoadIntoMemory()
@@ -120,6 +121,11 @@ namespace Emulator.GB.Core
             _opCodes[0x73] = () => LoadIntoMemory(HL, E);
             _opCodes[0x74] = () => LoadIntoMemory(HL, H);
             _opCodes[0x75] = () => LoadIntoMemory(HL, L);
+            _opCodes[0x02] = () => LoadIntoMemory(BC, A);
+            _opCodes[0x12] = () => LoadIntoMemory(DE, A);
+            _opCodes[0x77] = () => LoadIntoMemory(HL, A);
+            _opCodes[0x36] = () => { LoadIntoMemory(HL, _mmu.ReadByte(PC++)); _lastOpTime += 4; };
+            _opCodes[0xEA] = () => { LoadIntoMemory(_mmu.ReadWord(PC), A); PC += 2; _lastOpTime += 8; };
         }
     }
 }
