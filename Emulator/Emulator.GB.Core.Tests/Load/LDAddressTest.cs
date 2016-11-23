@@ -372,6 +372,7 @@ namespace Emulator.GB.Core.Tests.Load
             TestRegisterLoad(0x68, c => c.B, () => _cpu.L);
         }
 
+
         [TestMethod]
         public void LD_LC()
         {

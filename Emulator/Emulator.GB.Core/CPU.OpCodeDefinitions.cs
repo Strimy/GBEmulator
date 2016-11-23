@@ -10,6 +10,8 @@ namespace Emulator.GB.Core
     {
 		private void InitializeOpCodes()
         {
+            // Used mainly for debugging
+            // Fill the opcodes with a not implemented exception so we can test which op code doesn't exist
             for (int i = 0; i < _opCodes.Length; i++)
             {
                 _opCodes[i] = () => { throw new NotImplementedException(); };
@@ -20,8 +22,14 @@ namespace Emulator.GB.Core
             InitLoadAddress();
             InitLoadIntoMemory();
             InitLoadImmediateAddress();
+            InitLoadC();
+            InitLoadHL();
+            InitLoadFFA();
         }
 
+        /// <summary>
+        /// Prepare the basic 8 bits loads to a specific register
+        /// </summary>
         private void InitLoad8Bits()
         {
             _opCodes[0x3E] = () => LoadImmediate(ref _a);
@@ -126,6 +134,26 @@ namespace Emulator.GB.Core
             _opCodes[0x77] = () => LoadIntoMemory(HL, A);
             _opCodes[0x36] = () => { LoadIntoMemory(HL, _mmu.ReadByte(PC++)); _lastOpTime += 4; };
             _opCodes[0xEA] = () => { LoadIntoMemory(_mmu.ReadWord(PC), A); PC += 2; _lastOpTime += 8; };
+        }
+
+        protected void InitLoadC()
+        {
+            _opCodes[0xF2] = () => LoadAFromC();
+            _opCodes[0xE2] = () => LoadCFromA();
+        }
+
+        protected void InitLoadHL()
+        {
+            _opCodes[0x3A] = () => { LoadAddress(ref _a, HL--); _lastOpTime = 8; };
+            _opCodes[0x32] = () => { LoadIntoMemory(HL--, A); _lastOpTime = 8; };
+            _opCodes[0x2A] = () => { LoadAddress(ref _a, HL++); _lastOpTime = 8; };
+            _opCodes[0x22] = () => { LoadIntoMemory(HL++, A); _lastOpTime = 8; };
+        }
+
+        protected void InitLoadFFA()
+        {
+            _opCodes[0xE0] = () => { LoadIntoMemory(0xFF00 | _mmu.ReadByte(PC++), _a); _lastOpTime = 12; };
+            _opCodes[0xF0] = () => { LoadAddress(ref _a, 0xFF00 | _mmu.ReadByte(PC++)); _lastOpTime = 12; };
         }
     }
 }

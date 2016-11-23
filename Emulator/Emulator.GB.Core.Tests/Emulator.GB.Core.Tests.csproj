@@ -45,12 +45,17 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
     <Compile Include="Load\LDAddressTest.cs" />
+    <Compile Include="Load\LoadFFA.cs" />
+    <Compile Include="Load\LoadHL.cs" />
+    <Compile Include="Load\LoadC.cs" />
     <Compile Include="Mock\AddressReturnedMMU.cs" />
     <Compile Include="Load\LD8bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
