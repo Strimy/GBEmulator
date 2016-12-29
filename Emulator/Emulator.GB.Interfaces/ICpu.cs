@@ -53,6 +53,7 @@ namespace Emulator.GB.Interfaces
         byte FetchNextOpCode();
 
         void Init();
+        void ExecBios();
 
         #region Debugs interface
         void SetMMU(IMMU mmu);

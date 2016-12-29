@@ -245,7 +245,7 @@ namespace Emulator.GB.Core
             // Reset the last OpTime, this should be updated by each op code
             _lastOpTime = 0;
             // Direct array access should be quicker than Dictionary or predicates
-            // Bench for Action overhead
+            // TODO : Bench for Action overhead
             _opCodes[opCode]();
         }
 
@@ -254,11 +254,22 @@ namespace Emulator.GB.Core
             return _mmu.ReadByte(PC++);
         }
 
-
+        /// <summary>
+        /// Initialize the registers to simulate the "BIOS" code
+        /// </summary>
         public void Init()
         {
             
         }
+
+        /// <summary>
+        /// Execs the "BIOS" code for real
+        /// </summary>
+        public void ExecBios()
+        {
+
+        }
+
 
         public void SetMMU(IMMU mmu)
         {
