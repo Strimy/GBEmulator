@@ -9,10 +9,10 @@ namespace Emulator.GB.Interfaces
     public interface ICpu
     {
         #region Registers
-        short AF { get; }
-        short BC { get; }
-        short DE { get; }
-        short HL { get; }
+        ushort AF { get; }
+        ushort BC { get; }
+        ushort DE { get; }
+        ushort HL { get; }
 
         byte A { get; }
         byte B { get; }
@@ -34,7 +34,7 @@ namespace Emulator.GB.Interfaces
         /// <summary>
         /// Stack pointer
         /// </summary>  
-        short SP { get; }
+        ushort SP { get; }
 
         bool ZeroFlag { get; }
 
@@ -57,9 +57,7 @@ namespace Emulator.GB.Interfaces
 
         #region Debugs interface
         void SetMMU(IMMU mmu);
-        void SetRegister(Expression<Func<ICpu, byte>> b, byte value);
-        void SetRegister(Expression<Func<ICpu, short>> b, short value);
-        void SetRegister(Expression<Func<ICpu, int>> b, int value);
+        void SetRegister<T>(Expression<Func<ICpu, T>> b, T value) where T : struct;
         #endregion
     }
 }

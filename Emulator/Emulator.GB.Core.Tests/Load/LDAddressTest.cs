@@ -65,7 +65,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_ABC()
         {
-            _cpu.SetRegister(c => c.BC, (short)0x7008);
+            _cpu.SetRegister(c => c.BC, (ushort)0x7008);
 
             _cpu.Exec(0x0A);
 
@@ -76,7 +76,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_ADE()
         {
-            _cpu.SetRegister(c => c.DE, (short)0x7008);
+            _cpu.SetRegister(c => c.DE, (ushort)0x7008);
 
             _cpu.Exec(0x1A);
 
@@ -87,7 +87,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_AHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x7E);
 
@@ -140,7 +140,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_BHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x46);
 
@@ -193,7 +193,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_CHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x4E);
 
@@ -246,7 +246,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_DHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x56);
 
@@ -299,7 +299,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_EHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x5E);
 
@@ -352,7 +352,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_HHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x66);
 
@@ -406,7 +406,7 @@ namespace Emulator.GB.Core.Tests.Load
         [TestMethod]
         public void LD_LHL()
         {
-            _cpu.SetRegister(c => c.HL, (short)0x7008);
+            _cpu.SetRegister(c => c.HL, (ushort)0x7008);
 
             _cpu.Exec(0x6E);
 
@@ -418,7 +418,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLB()
         {
             _cpu.SetRegister(c => c.B, (byte)0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x70);
 
@@ -430,7 +430,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLC()
         {
             _cpu.SetRegister(c => c.C, (byte)0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x71);
 
@@ -442,7 +442,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLD()
         {
             _cpu.SetRegister(c => c.D, (byte)0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x72);
 
@@ -454,7 +454,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLE()
         {
             _cpu.SetRegister(c => c.E, (byte)0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x73);
 
@@ -466,7 +466,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLH()
         {
             _cpu.SetRegister(c => c.H, (byte)0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x74);
 
@@ -478,7 +478,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLL()
         {
             _cpu.SetRegister(c => c.L, (byte)0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x75);
 
@@ -490,7 +490,7 @@ namespace Emulator.GB.Core.Tests.Load
         public void LD_HLn()
         {
             _cpu.SetRegister(c => c.PC, 0x38);
-            _cpu.SetRegister(c => c.HL, (short)0x3838);
+            _cpu.SetRegister(c => c.HL, (ushort)0x3838);
 
             _cpu.Exec(0x36);
 
@@ -546,10 +546,10 @@ namespace Emulator.GB.Core.Tests.Load
             Assert.AreEqual(0x42, _cpu.MMU.ReadByte(_cpu.MMU.ReadWord(_cpu.PC)));
         }
 
-        private void TestLoadIntoMemory(int opCode, Expression<Func<ICpu, byte>> registerSource, Expression<Func<ICpu, short>> targetRegisterAddress)
+        private void TestLoadIntoMemory(int opCode, Expression<Func<ICpu, byte>> registerSource, Expression<Func<ICpu, ushort>> targetRegisterAddress)
         {
             _cpu.SetRegister(registerSource, (byte)0x38);
-            _cpu.SetRegister(targetRegisterAddress, 0x3838);
+            _cpu.SetRegister(targetRegisterAddress, (ushort)0x3838);
 
             _cpu.Exec(opCode);
 
@@ -564,7 +564,7 @@ namespace Emulator.GB.Core.Tests.Load
 
         private void TestRegisterLoad(int opCode, Expression<Func<ICpu, byte>> source, Func<byte> target)
         {
-            _cpu.SetRegister(source, 0x42);
+            _cpu.SetRegister(source, (byte)0x42);
 
             _cpu.Exec(opCode);
 

@@ -30,11 +30,11 @@ namespace Emulator.GB.Core
             }
         }
 
-        public short AF
+        public ushort AF
         {
             get
             {
-                return (short)(A << 8 | F);
+                return (ushort)(A << 8 | F);
             }
         }
 
@@ -50,11 +50,11 @@ namespace Emulator.GB.Core
             }
         }
 
-        public short BC
+        public ushort BC
         {
             get
             {
-                return (short)(B << 8 | C);
+                return (ushort)(B << 8 | C);
             }
             private set
             {
@@ -95,11 +95,11 @@ namespace Emulator.GB.Core
             }
         }
 
-        public short DE
+        public ushort DE
         {
             get
             {
-                return (short)(D << 8 | E);
+                return (ushort)(D << 8 | E);
             }
             private set
             {
@@ -152,11 +152,11 @@ namespace Emulator.GB.Core
             }
         }
 
-        public short HL
+        public ushort HL
         {
             get
             {
-                return (short)(H << 8 | L);
+                return (ushort)(H << 8 | L);
 
             }
             private set
@@ -211,7 +211,7 @@ namespace Emulator.GB.Core
             }
         }
 
-        public short SP
+        public ushort SP
         {
             get
             {
@@ -278,25 +278,20 @@ namespace Emulator.GB.Core
 
         public void SetRegister(Expression<Func<ICpu, byte>> inExpr, byte value)
         {
-            var expr = (MemberExpression)inExpr.Body;
-            var prop = (PropertyInfo)expr.Member;
-
-            prop = typeof(CPU).GetProperty(prop.Name);
-
-            prop.SetValue(this, value);
+            SetRegister<byte>(inExpr, value);
         }
 
-        public void SetRegister(Expression<Func<ICpu, short>> inExpr, short value)
+        public void SetRegister(Expression<Func<ICpu, ushort>> inExpr, ushort value)
         {
-            var expr = (MemberExpression)inExpr.Body;
-            var prop = (PropertyInfo)expr.Member;
-
-            prop = typeof(CPU).GetProperty(prop.Name);
-
-            prop.SetValue(this, value);
+            SetRegister<ushort>(inExpr, value);
         }
 
         public void SetRegister(Expression<Func<ICpu, int>> inExpr, int value)
+        {
+            SetRegister<int>(inExpr, value);
+        }
+
+        public void SetRegister<T>(Expression<Func<ICpu, T>> inExpr, T value) where T : struct
         {
             var expr = (MemberExpression)inExpr.Body;
             var prop = (PropertyInfo)expr.Member;
