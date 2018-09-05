@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace Emulator.GB.Core
 {
-    public partial class CPU 
+    public partial class CPU
     {
-		private void InitializeOpCodes()
+        private void InitializeOpCodes()
         {
             // Used mainly for debugging
             // Fill the opcodes with a not implemented exception so we can test which op code doesn't exist
             for (int i = 0; i < _opCodes.Length; i++)
             {
-                _opCodes[i] = () => { throw new NotImplementedException(); };
+                var opCode = i;
+                _opCodes[i] = () => { throw new NotImplementedException("OPCode not implemented " + opCode); };
             }
 
             InitLoad8Bits();
@@ -25,6 +26,89 @@ namespace Emulator.GB.Core
             InitLoadC();
             InitLoadHL();
             InitLoadFFA();
+            InitLoad16bits();
+            InitXor();
+            InitJumps();
+            InitExtentedOpCodes();
+        }
+
+        private void InitJumps()
+        {
+            _opCodes[0x20] = JmpNZ;
+        }
+
+        private void InitExtentedOpCodes()
+        {
+            InitTestBit();
+        }
+
+        private void InitTestBit()
+        {
+            // Bit 1
+            _opCodesExt[0x47] = () => TestBit(0, A);
+            _opCodesExt[0x40] = () => TestBit(0, B);
+            _opCodesExt[0x41] = () => TestBit(0, C);
+            _opCodesExt[0x42] = () => TestBit(0, D);
+            _opCodesExt[0x43] = () => TestBit(0, E);
+            _opCodesExt[0x44] = () => TestBit(0, H);
+            _opCodesExt[0x45] = () => TestBit(0, L);
+
+            // Bit 2
+            _opCodesExt[0x4F] = () => TestBit(1, A);
+            _opCodesExt[0x48] = () => TestBit(1, B);
+            _opCodesExt[0x49] = () => TestBit(1, C);
+            _opCodesExt[0x4A] = () => TestBit(1, D);
+            _opCodesExt[0x4B] = () => TestBit(1, E);
+            _opCodesExt[0x4C] = () => TestBit(1, H);
+            _opCodesExt[0x4D] = () => TestBit(1, L);
+
+
+            _opCodesExt[0x57] = () => TestBit(2, A);
+            _opCodesExt[0x50] = () => TestBit(2, B);
+            _opCodesExt[0x51] = () => TestBit(2, C);
+            _opCodesExt[0x52] = () => TestBit(2, D);
+            _opCodesExt[0x53] = () => TestBit(2, E);
+            _opCodesExt[0x54] = () => TestBit(2, H);
+            _opCodesExt[0x55] = () => TestBit(2, L);
+
+            _opCodesExt[0x5F] = () => TestBit(3, A);
+            _opCodesExt[0x58] = () => TestBit(3, B);
+            _opCodesExt[0x59] = () => TestBit(3, C);
+            _opCodesExt[0x5A] = () => TestBit(3, D);
+            _opCodesExt[0x5B] = () => TestBit(3, E);
+            _opCodesExt[0x5C] = () => TestBit(3, H);
+            _opCodesExt[0x5D] = () => TestBit(3, L);
+
+            _opCodesExt[0x67] = () => TestBit(4, A);
+            _opCodesExt[0x60] = () => TestBit(4, B);
+            _opCodesExt[0x61] = () => TestBit(4, C);
+            _opCodesExt[0x62] = () => TestBit(4, D);
+            _opCodesExt[0x63] = () => TestBit(4, E);
+            _opCodesExt[0x64] = () => TestBit(4, H);
+            _opCodesExt[0x65] = () => TestBit(4, L);
+
+            _opCodesExt[0x6F] = () => TestBit(5, A);
+            _opCodesExt[0x68] = () => TestBit(5, B);
+            _opCodesExt[0x69] = () => TestBit(5, C);
+            _opCodesExt[0x6A] = () => TestBit(5, D);
+            _opCodesExt[0x6B] = () => TestBit(5, E);
+            _opCodesExt[0x6C] = () => TestBit(5, H);
+            _opCodesExt[0x6D] = () => TestBit(5, L);
+
+            _opCodesExt[0x77] = () => TestBit(6, A);
+            _opCodesExt[0x70] = () => TestBit(6, B);
+            _opCodesExt[0x71] = () => TestBit(6, C);
+            _opCodesExt[0x72] = () => TestBit(6, D);
+            _opCodesExt[0x73] = () => TestBit(6, E);
+            _opCodesExt[0x74] = () => TestBit(6, H);
+            _opCodesExt[0x75] = () => TestBit(6, L);
+
+            _opCodesExt[0x7F] = () => TestBit(7, A);
+            _opCodesExt[0x78] = () => TestBit(7, B);
+            _opCodesExt[0x79] = () => TestBit(7, C);
+            _opCodesExt[0x7A] = () => TestBit(7, D);
+            _opCodesExt[0x7B] = () => TestBit(7, E);
+            _opCodesExt[0x7C] = () => TestBit(7, H);
         }
 
         /// <summary>
@@ -66,8 +150,8 @@ namespace Emulator.GB.Core
             _opCodes[0x4b] = () => LoadRegister(ref _c, _e);
             _opCodes[0x4c] = () => LoadRegister(ref _c, _h);
             _opCodes[0x4d] = () => LoadRegister(ref _c, _l);
-            
-			_opCodes[0x57] = () => LoadRegister(ref _d, _a);
+
+            _opCodes[0x57] = () => LoadRegister(ref _d, _a);
             _opCodes[0x50] = () => LoadRegister(ref _d, _b);
             _opCodes[0x51] = () => LoadRegister(ref _d, _c);
             _opCodes[0x52] = () => LoadRegister(ref _d, _d);
@@ -116,7 +200,7 @@ namespace Emulator.GB.Core
             _opCodes[0x6E] = () => LoadAddress(ref _l, HL);
         }
 
-		protected void InitLoadImmediateAddress()
+        protected void InitLoadImmediateAddress()
         {
             _opCodes[0xFA] = () => LoadImmediateAddress(ref _a);
         }
@@ -145,15 +229,36 @@ namespace Emulator.GB.Core
         protected void InitLoadHL()
         {
             _opCodes[0x3A] = () => { LoadAddress(ref _a, HL--); _lastOpTime = 8; };
-            _opCodes[0x32] = () => { LoadIntoMemory(HL--, A); _lastOpTime = 8; };
+            _opCodes[0x32] = () => { LoadIntoMemory(HL--, A);  };
             _opCodes[0x2A] = () => { LoadAddress(ref _a, HL++); _lastOpTime = 8; };
-            _opCodes[0x22] = () => { LoadIntoMemory(HL++, A); _lastOpTime = 8; };
+            _opCodes[0x22] = () => { LoadIntoMemory(HL++, A);  };
         }
 
         protected void InitLoadFFA()
         {
             _opCodes[0xE0] = () => { LoadIntoMemory(0xFF00 | _mmu.ReadByte(PC++), _a); _lastOpTime = 12; };
             _opCodes[0xF0] = () => { LoadAddress(ref _a, 0xFF00 | _mmu.ReadByte(PC++)); _lastOpTime = 12; };
+        }
+
+        protected void InitLoad16bits()
+        {
+            _opCodes[0x01] = () => LoadImmediate16Bits(ref _b, ref _c);
+            _opCodes[0x11] = () => LoadImmediate16Bits(ref _d, ref _e);
+            _opCodes[0x21] = () => LoadImmediate16Bits(ref _h, ref _l);
+            _opCodes[0x31] = () => LoadImmediate16Bits(ref _sp);
+
+        }
+
+        protected void InitXor()
+        {
+            _opCodes[0xAF] = () => Xor(ref _a);
+            _opCodes[0xA8] = () => Xor(ref _b);
+            _opCodes[0xA9] = () => Xor(ref _c);
+            _opCodes[0xAA] = () => Xor(ref _d);
+            _opCodes[0xAB] = () => Xor(ref _e);
+            _opCodes[0xAC] = () => Xor(ref _h);
+            _opCodes[0xAD] = () => Xor(ref _l);
+            _opCodes[0xAE] = () => Xor(HL);
         }
     }
 }

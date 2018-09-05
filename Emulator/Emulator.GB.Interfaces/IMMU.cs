@@ -13,7 +13,7 @@ namespace Emulator.GB.Interfaces
     public interface IMMU
     {
         byte ReadByte(int address);
-        int ReadWord(int address);
+        ushort ReadWord(int address);
 
         void WriteByte(int address, byte value);
         void WriteWord(int address, int value);

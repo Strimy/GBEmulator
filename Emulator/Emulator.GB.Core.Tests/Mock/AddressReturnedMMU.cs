@@ -32,11 +32,11 @@ namespace Emulator.GB.Core.Tests
             return (byte)(address);
         }
 
-        public int ReadWord(int address)
+        public ushort ReadWord(int address)
         {
             byte ls = ReadByte(address);
             byte ms = ReadByte(address + 1);
-            return (ms << 8) | ls;
+            return (ushort)((ms << 8) | ls);
         }
 
         public void WriteByte(int address, byte value)

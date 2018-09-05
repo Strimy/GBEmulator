@@ -42,6 +42,30 @@ namespace Emulator.GB.Core
             _lastOpTime = 8; // MMU + Load
         }
 
+        /// <summary>
+        /// Load word value stored at address into register
+        /// </summary>
+        /// <param name="register">Target register</param>
+        /// <param name="address">Address to read the byte from</param>
+        protected void LoadImmediate16Bits(ref ushort register)
+        {
+            register = _mmu.ReadWord(PC);
+            _lastOpTime = 12;
+            PC += 2;
+        }
+
+        /// <summary>
+        /// Load word value stored at address into register
+        /// </summary>
+        /// <param name="register">Target register</param>
+        /// <param name="address">Address to read the byte from</param>
+        protected void LoadImmediate16Bits(ref byte hregister, ref byte lregister)
+        {
+            lregister = _mmu.ReadByte(PC++);
+            hregister = _mmu.ReadByte(PC++);
+            _lastOpTime = 12;
+        }
+
 
         /// <summary>
         /// Load byte value at the address written at the PC
@@ -79,6 +103,47 @@ namespace Emulator.GB.Core
         {
             _mmu.WriteByte(0xFF00 + _c, _a);
             _lastOpTime = 8;
+        }
+
+        protected void Xor(ref byte register)
+        {
+            _a = (byte)(register ^ _a);
+            _lastOpTime = 4;
+            // TODO : Set flags Z, N, H, C
+        }
+
+        protected void Xor(int address)
+        {
+            var value = _mmu.ReadByte(address);
+            _a = (byte)(value ^ _a);
+            _lastOpTime = 8;
+            // TODO : Set flags Z, N, H, C
+        }
+
+        protected void TestBit(int bitPos, byte value)
+        {
+            _fz = ((value >> bitPos) & 0x1) == 0;
+            _fn = false;
+            _fh = true;
+
+            _lastOpTime = 8;
+        }
+
+        protected void JmpNZ()
+        {
+            if(!ZeroFlag)
+            {
+                JumpImmediateRelative();
+            }
+
+            _lastOpTime = 8;
+        }
+
+        protected void JumpImmediateRelative()
+        {
+            var realValue = _mmu.ReadByte(PC++);
+            sbyte offset = (sbyte)realValue;
+            PC += offset;
         }
     }
 }

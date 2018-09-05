@@ -75,13 +75,6 @@ namespace Emulator.GB.Core
             }
         }
 
-        public bool CarryFlag
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         public byte D
         {
@@ -144,14 +137,6 @@ namespace Emulator.GB.Core
             }
         }
 
-        public bool HalfCarryFlag
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public ushort HL
         {
             get
@@ -179,9 +164,45 @@ namespace Emulator.GB.Core
         }
         #endregion
 
-        private Action[] _opCodes = new Action[0xFF];
+        #region Flags
+        private bool _fz;
 
-        
+        public bool ZeroFlag
+        {
+            get { return _fz; }
+            private set { _fz = value; }
+        }
+
+        private bool _fn;
+
+        public bool SubstractFlag
+        {
+            get { return _fn; }
+            set { _fn = value; }
+        }
+
+        private bool _fh;
+
+        public bool HalfCarryFlag
+        {
+            get { return _fh; }
+            set { _fh = value; }
+        }
+
+        private bool _carryFlag;
+
+        public bool CarryFlag
+        {
+            get { return _carryFlag; }
+            set { _carryFlag = value; }
+        }
+
+        #endregion
+
+        private Action[] _opCodes = new Action[0xFF];
+        private Action[] _opCodesExt = new Action[0xFF];
+
+
         public int LastOpTime
         {
             get
@@ -198,7 +219,7 @@ namespace Emulator.GB.Core
             }
         }
 
-        private int _pc;
+        private int _pc = 0;
         public int PC
         {
             get
@@ -211,27 +232,16 @@ namespace Emulator.GB.Core
             }
         }
 
+        private ushort _sp;
         public ushort SP
         {
             get
             {
-                throw new NotImplementedException();
+                return _sp;
             }
-        }
-
-        public bool SubstractFlag
-        {
-            get
+            set
             {
-                throw new NotImplementedException();
-            }
-        }
-
-        public bool ZeroFlag
-        {
-            get
-            {
-                throw new NotImplementedException();
+                _sp = value;
             }
         }
 
@@ -246,7 +256,14 @@ namespace Emulator.GB.Core
             _lastOpTime = 0;
             // Direct array access should be quicker than Dictionary or predicates
             // TODO : Bench for Action overhead
-            _opCodes[opCode]();
+
+            if (opCode == 0xCB)
+            {
+                var extOpCode = FetchNextOpCode();
+                _opCodesExt[extOpCode]();
+            }
+            else
+                _opCodes[opCode]();
         }
 
         public byte FetchNextOpCode()
@@ -267,9 +284,16 @@ namespace Emulator.GB.Core
         /// </summary>
         public void ExecBios()
         {
+            PC = 0;
+
 
         }
 
+        public void Step()
+        {
+            var opCode = FetchNextOpCode();
+            Exec(opCode);
+        }
 
         public void SetMMU(IMMU mmu)
         {
