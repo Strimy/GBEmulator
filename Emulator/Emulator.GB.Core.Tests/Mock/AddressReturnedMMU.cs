@@ -39,6 +39,12 @@ namespace Emulator.GB.Core.Tests
             return (ushort)((ms << 8) | ls);
         }
 
+        public void SetCartridge(ICartridge cartridge)
+        {
+            
+
+        }
+
         public void WriteByte(int address, byte value)
         {
             _mapWrittenAddress[address] = value;

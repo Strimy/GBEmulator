@@ -15,6 +15,8 @@ namespace Emulator.GB.Core
         private int _lastOpTime;
         private IMMU _mmu;
         private byte _a, _b, _c, _d, _e, _h, _f, _l;
+        private bool _interruptsEnabled;
+        private uint _intructionsCounter = 0;
         #endregion
 
         #region Registers
@@ -257,13 +259,26 @@ namespace Emulator.GB.Core
             // Direct array access should be quicker than Dictionary or predicates
             // TODO : Bench for Action overhead
 
-            if (opCode == 0xCB)
+            byte extOpCode = 0;
+
+            try
             {
-                var extOpCode = FetchNextOpCode();
-                _opCodesExt[extOpCode]();
+                _intructionsCounter++;
+                if (opCode == 0xCB)
+                {
+                    extOpCode = FetchNextOpCode();
+                    _opCodesExt[extOpCode]();
+                }
+                else
+                    _opCodes[opCode]();
             }
-            else
-                _opCodes[opCode]();
+            catch(Exception e)
+            {
+                throw new InvalidOperationException($"CPU thrown an exception with state : \n" +
+                                                $"OP Code: {opCode:X} - Ext : {extOpCode:X} \n" +
+                                                $"PC: {PC} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n"+
+                                                $"Instructions run : {_intructionsCounter}", e);
+            }
         }
 
         public byte FetchNextOpCode()

@@ -17,7 +17,13 @@ namespace Emulator.GB.Core
                 var opCode = i;
                 _opCodes[i] = () => { throw new NotImplementedException("OPCode not implemented " + opCode); };
             }
+            for (int i = 0; i < _opCodesExt.Length; i++)
+            {
+                var opCode = i;
+                _opCodesExt[i] = () => { throw new NotImplementedException("OPCode Ext not implemented CB " + opCode); };
+            }
 
+            InitIncrement();
             InitLoad8Bits();
             InitLoadRegister8Bits();
             InitLoadAddress();
@@ -30,6 +36,65 @@ namespace Emulator.GB.Core
             InitXor();
             InitJumps();
             InitExtentedOpCodes();
+            InitMisc();
+            InitPush();
+            InitPop();
+            InitRL();
+
+            _opCodes[0xCD] = Call;
+        }
+
+
+        private void InitRL()
+        {
+            _opCodesExt[0x17] = () => { RL(ref _a); };
+            _opCodesExt[0x10] = () => { RL(ref _b); };
+            _opCodesExt[0x11] = () => { RL(ref _c); };
+            _opCodesExt[0x12] = () => { RL(ref _d); };
+            _opCodesExt[0x13] = () => { RL(ref _e); };
+            _opCodesExt[0x14] = () => { RL(ref _h); };
+            _opCodesExt[0x15] = () => { RL(ref _l); };
+            _opCodesExt[0x16] = () => 
+            {
+                var value = _mmu.ReadByte(HL);
+                RL(ref value);
+                _mmu.WriteByte(HL, value);
+            };
+
+            _opCodes[0x17] = () => { RL(ref _a); _lastOpTime = 4; };
+
+        }
+        private void InitPop()
+        {
+            _opCodes[0xF1] = () => { Pop(ref _a, ref _f); };
+            _opCodes[0xC1] = () => { Pop(ref _b, ref _c); };
+            _opCodes[0xD1] = () => { Pop(ref _d, ref _e); };
+            _opCodes[0xE1] = () => { Pop(ref _l, ref _l); };
+        }
+
+        private void InitPush()
+        {
+            _opCodes[0xF5] = () => { Push(A, F); };
+            _opCodes[0xC5] = () => { Push(B, C); };
+            _opCodes[0xD5] = () => { Push(D, E); };
+            _opCodes[0xE5] = () => { Push(H, L); };
+        }
+
+        private void InitIncrement()
+        {
+            _opCodes[0x3C] = () => Increment(ref _a);
+            _opCodes[0x04] = () => Increment(ref _b);
+            _opCodes[0x0C] = () => Increment(ref _c);
+            _opCodes[0x14] = () => Increment(ref _d);
+            _opCodes[0x1C] = () => Increment(ref _e);
+            _opCodes[0x24] = () => Increment(ref _h);
+            _opCodes[0x2C] = () => Increment(ref _h);
+
+        }
+
+        private void InitMisc()
+        {
+            _opCodes[0xFB] = () => { _interruptsEnabled = true; };
         }
 
         private void InitJumps()

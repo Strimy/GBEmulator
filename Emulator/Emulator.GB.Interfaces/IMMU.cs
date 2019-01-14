@@ -18,5 +18,6 @@ namespace Emulator.GB.Interfaces
         void WriteByte(int address, byte value);
         void WriteWord(int address, int value);
 
+        void SetCartridge(ICartridge cartridge);
     }
 }

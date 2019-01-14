@@ -145,5 +145,53 @@ namespace Emulator.GB.Core
             sbyte offset = (sbyte)realValue;
             PC += offset;
         }
+
+        protected void Increment(ref byte register)
+        {
+            register++;
+            _fh = register > 0x0F;
+            _lastOpTime = 4;
+            _fn = false;
+            _fz = register == 0;
+        }
+
+        protected void Call()
+        {
+            SP -= 2;
+            _mmu.WriteWord(SP, PC + 2);
+            PC = _mmu.ReadWord(PC);
+            _lastOpTime = 12;
+        }
+
+        protected void Push(byte high, byte low)
+        {
+            _mmu.WriteByte(--SP, high);
+            _mmu.WriteByte(--SP, low);
+            _lastOpTime = 16;
+        }
+
+        protected void Pop(ref byte high, ref byte low)
+        {
+            low = _mmu.ReadByte(SP++);
+            high = _mmu.ReadByte(SP++);
+
+            _lastOpTime = 12;
+        }
+
+        protected void RL(ref byte register)
+        {
+            bool carry = CarryFlag;
+
+            CarryFlag = register >> 7 > 0;
+            register = (byte)(register << 1);
+            if (carry)
+                register++;
+
+            ZeroFlag = register == 0;
+            SubstractFlag = false;
+            HalfCarryFlag = false;
+
+            _lastOpTime = 8;
+        }
     }
 }
