@@ -24,6 +24,7 @@ namespace Emulator.GB.Core
             }
 
             InitIncrement();
+            InitDecrement();
             InitLoad8Bits();
             InitLoadRegister8Bits();
             InitLoadAddress();
@@ -89,6 +90,18 @@ namespace Emulator.GB.Core
             _opCodes[0x1C] = () => Increment(ref _e);
             _opCodes[0x24] = () => Increment(ref _h);
             _opCodes[0x2C] = () => Increment(ref _h);
+
+        }
+
+        private void InitDecrement()
+        {
+            _opCodes[0x3D] = () => Decrement(ref _a);
+            _opCodes[0x05] = () => Decrement(ref _b);
+            _opCodes[0x0D] = () => Decrement(ref _c);
+            _opCodes[0x15] = () => Decrement(ref _d);
+            _opCodes[0x1D] = () => Decrement(ref _e);
+            _opCodes[0x25] = () => Decrement(ref _h);
+            _opCodes[0x2D] = () => Decrement(ref _h);
 
         }
 

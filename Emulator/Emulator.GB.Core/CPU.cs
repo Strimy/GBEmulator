@@ -264,7 +264,7 @@ namespace Emulator.GB.Core
             try
             {
                 _intructionsCounter++;
-                if (opCode == 0xCB)
+                if (opCode == 0xCB) // Extended op codes
                 {
                     extOpCode = FetchNextOpCode();
                     _opCodesExt[extOpCode]();

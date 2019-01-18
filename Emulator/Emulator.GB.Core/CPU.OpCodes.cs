@@ -155,6 +155,15 @@ namespace Emulator.GB.Core
             _fz = register == 0;
         }
 
+        protected void Decrement(ref byte register)
+        {
+            register--;
+            _fh = register > 0x0F;
+            _lastOpTime = 4;
+            _fn = false;
+            _fz = register == 0;
+        }
+
         protected void Call()
         {
             SP -= 2;
