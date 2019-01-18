@@ -66,6 +66,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="IncDec\Decrement.cs" />
     <Compile Include="Load\LDAddressTest.cs" />
     <Compile Include="Load\LoadFFA.cs" />
     <Compile Include="Load\LoadHL.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Load\LD8bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CPURunTest.cs" />
+    <Compile Include="IncDec\Increment.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emulator.GB.Core\Emulator.GB.Core.csproj">

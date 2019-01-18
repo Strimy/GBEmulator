@@ -135,7 +135,10 @@ namespace Emulator.GB.Core
             {
                 JumpImmediateRelative();
             }
-
+            else
+            {
+                PC++;
+            }
             _lastOpTime = 8;
         }
 
@@ -150,9 +153,26 @@ namespace Emulator.GB.Core
         {
             register++;
             _fh = register > 0x0F;
-            _lastOpTime = 4;
             _fn = false;
             _fz = register == 0;
+            _lastOpTime = 4;
+        }
+
+        protected void Increment(ref byte h, ref byte l)
+        {
+            unchecked
+            {
+                l++;
+                if (l == 0)
+                    h++;
+            }
+            _lastOpTime = 8;
+        }
+
+        protected void Increment(ref ushort _register)
+        {
+            _register++;
+            _lastOpTime = 8;
         }
 
         protected void Decrement(ref byte register)
@@ -160,7 +180,7 @@ namespace Emulator.GB.Core
             register--;
             _fh = register > 0x0F;
             _lastOpTime = 4;
-            _fn = false;
+            _fn = true;
             _fz = register == 0;
         }
 
@@ -185,6 +205,22 @@ namespace Emulator.GB.Core
             high = _mmu.ReadByte(SP++);
 
             _lastOpTime = 12;
+        }
+
+        protected ushort Pop()
+        {
+            var low = _mmu.ReadWord(SP);
+            SP += 2;
+            _lastOpTime = 12;
+            return low;
+        }
+
+        protected void Return()
+        {
+            var address = Pop();
+            PC = address;
+
+            _lastOpTime = 8;
         }
 
         protected void RL(ref byte register)

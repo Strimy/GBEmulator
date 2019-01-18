@@ -40,6 +40,7 @@ namespace Emulator.GB.Core
             InitMisc();
             InitPush();
             InitPop();
+            InitReturn();
             InitRL();
 
             _opCodes[0xCD] = Call;
@@ -65,6 +66,12 @@ namespace Emulator.GB.Core
             _opCodes[0x17] = () => { RL(ref _a); _lastOpTime = 4; };
 
         }
+
+        private void InitReturn()
+        {
+            _opCodes[0xC9] = Return;
+        }
+
         private void InitPop()
         {
             _opCodes[0xF1] = () => { Pop(ref _a, ref _f); };
@@ -89,7 +96,12 @@ namespace Emulator.GB.Core
             _opCodes[0x14] = () => Increment(ref _d);
             _opCodes[0x1C] = () => Increment(ref _e);
             _opCodes[0x24] = () => Increment(ref _h);
-            _opCodes[0x2C] = () => Increment(ref _h);
+            _opCodes[0x2C] = () => Increment(ref _l);
+
+            _opCodes[0x03] = () => Increment(ref _b, ref _c);
+            _opCodes[0x13] = () => Increment(ref _d, ref _e);
+            _opCodes[0x23] = () => Increment(ref _h, ref _l);
+            _opCodes[0x33] = () => Increment(ref _sp);
 
         }
 

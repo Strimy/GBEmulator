@@ -22,6 +22,8 @@ namespace Emulator.GB.Core.Tests
 
             while(cpu.PC < 0xFF)
                 cpu.Step();
+
+            Assert.Fail(cpu.ToString());
         }
     }
 }

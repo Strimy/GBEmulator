@@ -17,6 +17,8 @@ namespace Emulator.GB.Core
         private byte _a, _b, _c, _d, _e, _h, _f, _l;
         private bool _interruptsEnabled;
         private uint _intructionsCounter = 0;
+        private int _lastOpCode;
+        private int _previousPC;
         #endregion
 
         #region Registers
@@ -256,6 +258,7 @@ namespace Emulator.GB.Core
         {
             // Reset the last OpTime, this should be updated by each op code
             _lastOpTime = 0;
+            _lastOpCode = opCode & 0xFF;
             // Direct array access should be quicker than Dictionary or predicates
             // TODO : Bench for Action overhead
 
@@ -267,6 +270,7 @@ namespace Emulator.GB.Core
                 if (opCode == 0xCB) // Extended op codes
                 {
                     extOpCode = FetchNextOpCode();
+                    _lastOpCode |= extOpCode << 8;
                     _opCodesExt[extOpCode]();
                 }
                 else
@@ -338,6 +342,13 @@ namespace Emulator.GB.Core
             prop = typeof(CPU).GetProperty(prop.Name);
 
             prop.SetValue(this, value);
+        }
+
+        public override string ToString()
+        {
+            return $"PC: {PC} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n" +
+                   $"Instructions run : {_intructionsCounter}";
+
         }
     }
 }
