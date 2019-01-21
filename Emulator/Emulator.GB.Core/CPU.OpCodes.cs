@@ -108,6 +108,12 @@ namespace Emulator.GB.Core
         protected void Xor(ref byte register)
         {
             _a = (byte)(register ^ _a);
+
+            _fh = false;
+            _fz = _a == 0;
+            _fn = false;
+            _carryFlag = false;
+
             _lastOpTime = 4;
             // TODO : Set flags Z, N, H, C
         }
@@ -116,6 +122,12 @@ namespace Emulator.GB.Core
         {
             var value = _mmu.ReadByte(address);
             _a = (byte)(value ^ _a);
+
+            _fh = false;
+            _fz = _a == 0;
+            _fn = false;
+            _carryFlag = false;
+
             _lastOpTime = 8;
             // TODO : Set flags Z, N, H, C
         }

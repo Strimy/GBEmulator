@@ -346,21 +346,6 @@ namespace Emulator.GB.Core
             _mmu = mmu;
         }
 
-        public void SetRegister(Expression<Func<ICpu, byte>> inExpr, byte value)
-        {
-            SetRegister<byte>(inExpr, value);
-        }
-
-        public void SetRegister(Expression<Func<ICpu, ushort>> inExpr, ushort value)
-        {
-            SetRegister<ushort>(inExpr, value);
-        }
-
-        public void SetRegister(Expression<Func<ICpu, int>> inExpr, int value)
-        {
-            SetRegister<int>(inExpr, value);
-        }
-
         public void SetRegister<T>(Expression<Func<ICpu, T>> inExpr, T value) where T : struct
         {
             var expr = (MemberExpression)inExpr.Body;
