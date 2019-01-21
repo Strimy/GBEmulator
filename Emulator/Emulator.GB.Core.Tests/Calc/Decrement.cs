@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Emulator.GB.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -15,94 +16,81 @@ namespace Emulator.GB.Core.Tests
             _cpu.SetMMU(new AddressReturnedMMU());
         }
 
+        private void Dec8BitsTest(Expression<Func<ICpu, byte>> expr, int opCode)
+        {
+            var method = expr.Compile();
+
+            _cpu.SetRegister<byte>(expr, 0x42);
+            _cpu.Exec(opCode);
+                       
+            Assert.AreEqual(0x41, method(_cpu));
+            Assert.AreEqual(false, _cpu.ZeroFlag);
+            Assert.AreEqual(true, _cpu.SubstractFlag);
+            Assert.AreEqual(false, _cpu.HalfCarryFlag);
+
+            _cpu.SetRegister<byte>(expr, 0x01);
+            _cpu.Exec(opCode);
+
+            Assert.AreEqual(0, method(_cpu));
+            Assert.AreEqual(true, _cpu.ZeroFlag);
+            Assert.AreEqual(true, _cpu.SubstractFlag);
+            Assert.AreEqual(false, _cpu.HalfCarryFlag);
+
+            _cpu.SetRegister<byte>(expr, 0x10);
+            _cpu.Exec(opCode);
+
+            Assert.AreEqual(0xF, method(_cpu));
+            Assert.AreEqual(false, _cpu.ZeroFlag);
+            Assert.AreEqual(true, _cpu.SubstractFlag);
+            Assert.AreEqual(true, _cpu.HalfCarryFlag);
+
+            Assert.AreEqual(4, _cpu.LastOpTime);
+
+        }
+
         [TestMethod]
         public void TestDecA()
         {
-            var opcode = 0x3D;
- 
-            _cpu.SetRegister<byte>(c => c.A, 0x42);
-
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.A);
+            Dec8BitsTest(c => c.A, 0x3D);
         }
 
         [TestMethod]
         public void TestDecB()
         {
-            var opcode = 0x05;
+            Dec8BitsTest(c => c.B, 0x05);
 
-            _cpu.SetRegister<byte>(c => c.B, 0x42);
-
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.B);
         }
 
         [TestMethod]
         public void TestDecC()
         {
-            var opcode = 0x0D;
-            _cpu.SetRegister<byte>(c => c.C, 0x42);
+            Dec8BitsTest(c => c.C, 0x0D);
 
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.C);
         }
 
         [TestMethod]
         public void TestDecD()
         {
-            var opcode = 0x15;
+            Dec8BitsTest(c => c.D, 0x15);
 
-            _cpu.SetRegister<byte>(c => c.D, 0x42);
-
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.D);
         }
 
         [TestMethod]
         public void TestDecE()
         {
-            var opcode = 0x1D;
-
-            _cpu.SetRegister<byte>(c => c.E, 0x42);
-
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.E);
+            Dec8BitsTest(c => c.E, 0x1D);
         }
 
         [TestMethod]
         public void TestDecH()
         {
-            var opcode = 0x25;
-
-            _cpu.SetRegister<byte>(c => c.H, 0x42);
-
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.H);
+            Dec8BitsTest(c => c.H, 0x25);
         }
 
         [TestMethod]
         public void TestDecL()
         {
-            var opcode = 0x2D;
-
-            _cpu.SetRegister<byte>(c => c.L, 0x42);
-
-            _cpu.Exec(opcode);
-
-            Assert.AreEqual(4, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.L);
+            Dec8BitsTest(c => c.L, 0x2D);
         }
 
         [TestMethod]
@@ -142,6 +130,10 @@ namespace Emulator.GB.Core.Tests
 
             Assert.AreEqual(8, _cpu.LastOpTime);
             Assert.AreEqual(0x41, _cpu.HL);
+
+            _cpu.SetRegister<ushort>(c => c.HL, 0x0100);
+            _cpu.Exec(opcode);
+            Assert.AreEqual(0xFF, _cpu.HL);
         }
 
         [TestMethod]
@@ -149,12 +141,15 @@ namespace Emulator.GB.Core.Tests
         {
             var opcode = 0x3B;
 
-            _cpu.SetRegister<ushort>(c => c.SP, 0x42);
-
+            _cpu.SetRegister<ushort>(c => c.SP, 0xFF42);
             _cpu.Exec(opcode);
+            Assert.AreEqual(0xFF41, _cpu.SP);
+
+            _cpu.SetRegister<ushort>(c => c.SP, 0x0100);
+            _cpu.Exec(opcode);
+            Assert.AreEqual(0xFF, _cpu.SP);
 
             Assert.AreEqual(8, _cpu.LastOpTime);
-            Assert.AreEqual(0x41, _cpu.SP);
         }
     }
 }

@@ -117,6 +117,10 @@ namespace Emulator.GB.Core
             }
         }
 
+        /// <summary>
+        /// Is this the Flag storage ? 
+        /// This may be a problem because PUSH/POP AF will not restore the flags correctly
+        /// </summary>
         public byte F
         {
             get
@@ -281,6 +285,29 @@ namespace Emulator.GB.Core
                 throw new InvalidOperationException($"CPU thrown an exception with state : \n" +
                                                 $"OP Code: {opCode:X} - Ext : {extOpCode:X} \n" +
                                                 $"PC: {PC} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n"+
+                                                $"Instructions run : {_intructionsCounter}", e);
+            }
+        }
+
+        public void ExecExtOpCode(int extOpCode)
+        {
+            // Reset the last OpTime, this should be updated by each op code
+            _lastOpTime = 0;
+
+            _lastOpCode = 0xCB;
+
+            try
+            {
+                _intructionsCounter++;
+
+                _lastOpCode |= extOpCode << 8;
+                _opCodesExt[extOpCode]();
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException($"CPU thrown an exception with state : \n" +
+                                                $"OP Code: {_lastOpCode:X} - Ext : {extOpCode:X} \n" +
+                                                $"PC: {PC} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n" +
                                                 $"Instructions run : {_intructionsCounter}", e);
             }
         }

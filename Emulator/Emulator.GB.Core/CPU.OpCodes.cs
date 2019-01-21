@@ -178,10 +178,25 @@ namespace Emulator.GB.Core
         protected void Decrement(ref byte register)
         {
             register--;
-            _fh = register > 0x0F;
+            _fh = (register & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
             _lastOpTime = 4;
             _fn = true;
             _fz = register == 0;
+        }
+
+        protected void Decrement(ref byte h, ref byte l)
+        {
+            l--;
+            if (l == 0xFF)
+                h--;
+
+            _lastOpTime = 8;
+        }
+
+        protected void Decrement(ref ushort _register)
+        {
+            _register--;
+            _lastOpTime = 8;
         }
 
         protected void Call()

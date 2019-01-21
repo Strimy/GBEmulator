@@ -49,6 +49,7 @@ namespace Emulator.GB.Interfaces
 
         int LastOpTime { get; }
         void Exec(int opCode);
+        void ExecExtOpCode(int extOpCode);
 
         byte FetchNextOpCode();
 

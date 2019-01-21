@@ -61,6 +61,7 @@ namespace Emulator.GB.Core
                 var value = _mmu.ReadByte(HL);
                 RL(ref value);
                 _mmu.WriteByte(HL, value);
+                _lastOpTime = 16;
             };
 
             _opCodes[0x17] = () => { RL(ref _a); _lastOpTime = 4; };
@@ -113,7 +114,12 @@ namespace Emulator.GB.Core
             _opCodes[0x15] = () => Decrement(ref _d);
             _opCodes[0x1D] = () => Decrement(ref _e);
             _opCodes[0x25] = () => Decrement(ref _h);
-            _opCodes[0x2D] = () => Decrement(ref _h);
+            _opCodes[0x2D] = () => Decrement(ref _l);
+
+            _opCodes[0x2B] = () => Decrement(ref _h, ref _l);
+            _opCodes[0x0B] = () => Decrement(ref _b, ref _c);
+            _opCodes[0x1B] = () => Decrement(ref _d, ref _e);
+            _opCodes[0x3B] = () => Decrement(ref _sp);
 
         }
 
@@ -199,6 +205,7 @@ namespace Emulator.GB.Core
             _opCodesExt[0x7A] = () => TestBit(7, D);
             _opCodesExt[0x7B] = () => TestBit(7, E);
             _opCodesExt[0x7C] = () => TestBit(7, H);
+            _opCodesExt[0x7D] = () => TestBit(7, L);
         }
 
         /// <summary>

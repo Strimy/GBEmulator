@@ -4,7 +4,7 @@ using Emulator.GB.Core;
 using Emulator.GB.Core.Cartridge;
 using System.IO;
 
-namespace Emulator.GB.Core.Tests
+namespace Emulator.GB.Core.Tests.Run
 {
     [TestClass]
     public class CPURunTest

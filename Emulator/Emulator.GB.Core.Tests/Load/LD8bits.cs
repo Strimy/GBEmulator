@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Emulator.GB.Interfaces;
 using System.Linq.Expressions;
 
-namespace Emulator.GB.Core.Tests
+namespace Emulator.GB.Core.Tests.Load
 {
     [TestClass]
     public class LD8bits
