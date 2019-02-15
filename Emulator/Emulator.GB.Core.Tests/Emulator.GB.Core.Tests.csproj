@@ -66,6 +66,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BaseTest.cs" />
     <Compile Include="Bits\TestXor.cs" />
     <Compile Include="Calc\Decrement.cs" />
     <Compile Include="Bits\TestBitB.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="Load\LoadFFA.cs" />
     <Compile Include="Load\LoadHL.cs" />
     <Compile Include="Load\LoadC.cs" />
+    <Compile Include="Misc\TestCP.cs" />
+    <Compile Include="Misc\TestJMP.cs" />
     <Compile Include="Mock\AddressReturnedMMU.cs" />
     <Compile Include="Load\LD8bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

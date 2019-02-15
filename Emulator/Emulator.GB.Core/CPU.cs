@@ -19,6 +19,8 @@ namespace Emulator.GB.Core
         private uint _intructionsCounter = 0;
         private int _lastOpCode;
         private int _previousPC;
+        private uint _instructionTime;
+
         #endregion
 
         #region Registers
@@ -241,6 +243,7 @@ namespace Emulator.GB.Core
         }
 
         private ushort _sp;
+
         public ushort SP
         {
             get
@@ -279,8 +282,11 @@ namespace Emulator.GB.Core
                 }
                 else
                     _opCodes[opCode]();
+
+                _instructionTime = (uint)_lastOpTime;
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new InvalidOperationException($"CPU thrown an exception with state : \n" +
                                                 $"OP Code: {opCode:X} - Ext : {extOpCode:X} \n" +

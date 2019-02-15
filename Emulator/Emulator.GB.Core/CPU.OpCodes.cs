@@ -154,6 +154,46 @@ namespace Emulator.GB.Core
             _lastOpTime = 8;
         }
 
+        protected void JmpZ()
+        {
+            if (ZeroFlag)
+            {
+                JumpImmediateRelative();
+            }
+            else
+            {
+                PC++;
+            }
+            _lastOpTime = 8;
+        }
+
+        protected void JmpNC()
+        {
+            if (!CarryFlag)
+            {
+                JumpImmediateRelative();
+            }
+            else
+            {
+                PC++;
+            }
+            _lastOpTime = 8;
+        }
+
+        protected void JmpC()
+        {
+            if (CarryFlag)
+            {
+                JumpImmediateRelative();
+            }
+            else
+            {
+                PC++;
+            }
+            _lastOpTime = 8;
+        }
+
+
         protected void JumpImmediateRelative()
         {
             var realValue = _mmu.ReadByte(PC++);
@@ -264,6 +304,45 @@ namespace Emulator.GB.Core
             HalfCarryFlag = false;
 
             _lastOpTime = 8;
+        }
+
+        protected void CP(byte register)
+        {
+            var value =_a - register;
+
+            _fz = value == 0;
+            _fn = true;
+            _fh = (value & 0x0F) == 0x0F;
+            _carryFlag = value < 0;
+
+            _lastOpTime = 4;
+        }
+
+        protected void CP(ushort hl)
+        {
+            var register = _mmu.ReadByte(hl);
+            var value = _a - register;
+
+            _fz = value == 0;
+            _fn = true;
+            _fh = (value & 0x0F) == 0x0F;
+            _carryFlag = value < 0;
+            _lastOpTime = 8;
+
+        }
+
+        protected void CPImmediate()
+        {
+            var register = _mmu.ReadByte(PC++);
+            var value = _a - register;
+
+            _fz = value == 0;
+            _fn = true;
+            _fh = (value & 0x0F) == 0x0F;
+            _carryFlag = value < 0;
+
+            _lastOpTime = 8;
+
         }
     }
 }

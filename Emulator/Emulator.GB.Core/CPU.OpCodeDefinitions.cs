@@ -42,6 +42,7 @@ namespace Emulator.GB.Core
             InitPop();
             InitReturn();
             InitRL();
+            InitCP();
 
             _opCodes[0xCD] = Call;
         }
@@ -130,7 +131,11 @@ namespace Emulator.GB.Core
 
         private void InitJumps()
         {
+            _opCodes[0x18] = JumpImmediateRelative;
             _opCodes[0x20] = JmpNZ;
+            _opCodes[0x28] = JmpZ;
+            _opCodes[0x30] = JmpNC;
+            _opCodes[0x38] = JmpC;
         }
 
         private void InitExtentedOpCodes()
@@ -356,6 +361,19 @@ namespace Emulator.GB.Core
             _opCodes[0xAC] = () => Xor(ref _h);
             _opCodes[0xAD] = () => Xor(ref _l);
             _opCodes[0xAE] = () => Xor(HL);
+        }
+
+        protected void InitCP()
+        {
+            _opCodes[0xBF] = () => { CP(_a); };
+            _opCodes[0xB8] = () => { CP(_b); };
+            _opCodes[0xB9] = () => { CP(_c); };
+            _opCodes[0xBA] = () => { CP(_d); };
+            _opCodes[0xBB] = () => { CP(_e); };
+            _opCodes[0xBC] = () => { CP(_h); };
+            _opCodes[0xBD] = () => { CP(_l); };
+            _opCodes[0xBE] = () => { CP(HL); };
+            _opCodes[0xFE] = () => { CPImmediate(); };
         }
     }
 }
