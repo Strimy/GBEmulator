@@ -7,10 +7,9 @@ namespace Emulator.GB.Core
 {
     public partial class MMU : IMMU
     {
-        private byte[] _vram = new byte[0x2000];
         private byte[] _highRam = new byte[127];
         private ICartridge _cartridge;
-
+        private GPU _gpu = new GPU();
 
         public byte ReadByte(int address)
         {
@@ -22,6 +21,15 @@ namespace Emulator.GB.Core
             // Cartridge
             if (address < 0x8000)
                 return _cartridge.ReadByte(address);
+            if (address >= 0x8000 && address < 0xA000)
+            {
+                int shiftedAddress = address & 0x1FFF;
+                return _gpu.VRam[shiftedAddress];
+            }
+
+            // GPU
+            if (address > 0xFF00 && address < 0xFF7F)
+                return _gpu.ReadByte(address);
 
             return GetBufferArea(address)[0];
 
@@ -41,8 +49,10 @@ namespace Emulator.GB.Core
             if(address >= 0x8000 && address < 0xA000)
             {
                 int shiftedAddress = address & 0x1FFF;
-                _vram[shiftedAddress] = value;
+                _gpu.VRam[shiftedAddress] = value;
             }
+            else if (address > 0xFF00 && address < 0xFF7F)
+                _gpu.WriteByte(address, value);
             else
             {
                 var area = GetBufferArea(address);
@@ -63,7 +73,7 @@ namespace Emulator.GB.Core
                 return _highRam.AsSpan(address & 0x007F, 1);
             }
 
-            return new Span<byte>(new byte[1]);
+            throw new NotImplementedException();
         }
 
         public void SetCartridge(ICartridge cartridge)
