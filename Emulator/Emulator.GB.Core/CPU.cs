@@ -125,10 +125,6 @@ namespace Emulator.GB.Core
             }
         }
 
-        /// <summary>
-        /// Is this the Flag storage ? 
-        /// This may be a problem because PUSH/POP AF will not restore the flags correctly
-        /// </summary>
         public byte F
         {
             get
@@ -181,36 +177,65 @@ namespace Emulator.GB.Core
         #endregion
 
         #region Flags
-        private bool _fz;
+        [Flags]
+        private enum FlagEnum : byte
+        {
+            Zero =          0b1000_0000,
+            Sub =           0b0100_0000,
+            HalfCarry =     0b0010_0000,
+            Carry =         0b0001_0000,
+        }
+
 
         public bool ZeroFlag
         {
-            get { return _fz; }
-            private set { _fz = value; }
+            get
+            {
+                return GetFlag(FlagEnum.Zero);
+            }
+            private set
+            {
+                SetFlag(FlagEnum.Zero, value);
+            }
         }
 
-        private bool _fn;
+
 
         public bool SubstractFlag
         {
-            get { return _fn; }
-            set { _fn = value; }
+            get
+            {
+                return GetFlag(FlagEnum.Sub);
+            }
+            private set
+            {
+                SetFlag(FlagEnum.Sub, value);
+            }
         }
 
-        private bool _fh;
 
         public bool HalfCarryFlag
         {
-            get { return _fh; }
-            set { _fh = value; }
+            get
+            {
+                return GetFlag(FlagEnum.HalfCarry);
+            }
+            private set
+            {
+                SetFlag(FlagEnum.HalfCarry, value);
+            }
         }
-
-        private bool _carryFlag;
 
         public bool CarryFlag
         {
-            get { return _carryFlag; }
-            set { _carryFlag = value; }
+            get
+            {
+                return GetFlag(FlagEnum.Carry);
+            }
+            private set
+            {
+                SetFlag(FlagEnum.Carry, value);
+            }
         }
 
         #endregion
@@ -373,9 +398,29 @@ namespace Emulator.GB.Core
 
         public override string ToString()
         {
-            return $"PC: {PC} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n" +
+            return $"PC: {PC} \n A: {A:X} \n B: {B:X} \n C: {C:X}\n D: {D:X}\n E: {E:X}\n F: {F:X}\n H: {H:X}\n L: {L:X}\n" +
                    $"Instructions run : {_intructionsCounter}";
 
         }
+
+        #region Private
+        private void SetFlag(FlagEnum flag, bool value)
+        {
+            if (value)
+            {
+                _f = (byte)(_f | (byte)flag);
+            }
+            else
+            {
+                //left-shift 1, then take complement, then bitwise AND
+                _f = (byte)(_f & ~(byte)flag);
+            }
+        }
+
+        private bool GetFlag(FlagEnum flag)
+        {
+            return (F & (byte)flag) > 0;
+        }
+        #endregion
     }
 }

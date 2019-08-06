@@ -31,7 +31,50 @@ namespace Emulator.GB.Core.Tests.Run
                 }
             }
 
-            Assert.Fail(cpu.ToString());
+            Assert.AreEqual(0x1, cpu.A);
+            Assert.AreEqual(0xB0, cpu.F);
+            Assert.AreEqual(0x00, cpu.B);
+            Assert.AreEqual(0x13, cpu.C);
+            Assert.AreEqual(0x00, cpu.D);
+            Assert.AreEqual(0xD8, cpu.E);
+            Assert.AreEqual(0x01, cpu.H);
+            Assert.AreEqual(0x4D, cpu.L);
+            Assert.AreEqual(0xFFFE, cpu.SP);
+
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF05));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF06));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF07));
+            // Sound not implemented
+            //Assert.AreEqual(0x80, cpu.MMU.ReadByte(0xFF10));
+            //Assert.AreEqual(0xBF, cpu.MMU.ReadByte(0xFF11));
+            //Assert.AreEqual(0xF3, cpu.MMU.ReadByte(0xFF12));
+            //Assert.AreEqual(0xBF, cpu.MMU.ReadByte(0xFF14));
+            //Assert.AreEqual(0x3F, cpu.MMU.ReadByte(0xFF16));
+            //Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF17));
+            //Assert.AreEqual(0xBF, cpu.MMU.ReadByte(0xFF19));
+            //Assert.AreEqual(0x7F, cpu.MMU.ReadByte(0xFF1A));
+            //Assert.AreEqual(0xFF, cpu.MMU.ReadByte(0xFF1B));
+            //Assert.AreEqual(0x9F, cpu.MMU.ReadByte(0xFF1C));
+            //Assert.AreEqual(0xBF, cpu.MMU.ReadByte(0xFF1E));
+            //Assert.AreEqual(0xFF, cpu.MMU.ReadByte(0xFF20));
+            //Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF21));
+            //Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF22));
+            //Assert.AreEqual(0xBF, cpu.MMU.ReadByte(0xFF23));
+            //Assert.AreEqual(0x77, cpu.MMU.ReadByte(0xFF24));
+            //Assert.AreEqual(0xF3, cpu.MMU.ReadByte(0xFF25));
+            //Assert.AreEqual(0xF1, cpu.MMU.ReadByte(0xFF26));
+            Assert.AreEqual(0x91, cpu.MMU.ReadByte(0xFF40));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF42));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF43));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF45));
+            Assert.AreEqual(0xFC, cpu.MMU.ReadByte(0xFF47));
+            Assert.AreEqual(0xFF, cpu.MMU.ReadByte(0xFF48));
+            Assert.AreEqual(0xFF, cpu.MMU.ReadByte(0xFF49));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF4A));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF4B));
+            Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFFFF));
+
+            Assert.Inconclusive(cpu.ToString());
         }
 
         [TestMethod]
@@ -106,8 +149,6 @@ namespace Emulator.GB.Core.Tests.Run
                 {
                     if (newMode == GPUMode.Mode3)
                     {
-                        // We got the new mode, check that timings are ok
-                        // Mode0 should stay up for 204 clock, meaning 19µsec
                         Assert.IsTrue(timeSpentMicroSec > 19M);
                         Assert.IsTrue(timeSpentMicroSec < 19.1M);
                         return;
@@ -153,8 +194,6 @@ namespace Emulator.GB.Core.Tests.Run
                 {
                     if (newMode == GPUMode.Mode0)
                     {
-                        // We got the new mode, check that timings are ok
-                        // Mode3 should stay up for 204 clock, meaning 19µsec
                         Assert.IsTrue(timeSpentMicroSec > 41);
                         Assert.IsTrue(timeSpentMicroSec < 42M);
                         return;

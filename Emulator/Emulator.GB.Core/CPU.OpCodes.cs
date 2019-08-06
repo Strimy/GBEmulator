@@ -109,10 +109,10 @@ namespace Emulator.GB.Core
         {
             _a = (byte)(register ^ _a);
 
-            _fh = false;
-            _fz = _a == 0;
-            _fn = false;
-            _carryFlag = false;
+            HalfCarryFlag = false;
+            ZeroFlag = _a == 0;
+            SubstractFlag = false;
+            CarryFlag = false;
 
             _lastOpTime = 4;
             // TODO : Set flags Z, N, H, C
@@ -123,10 +123,10 @@ namespace Emulator.GB.Core
             var value = _mmu.ReadByte(address);
             _a = (byte)(value ^ _a);
 
-            _fh = false;
-            _fz = _a == 0;
-            _fn = false;
-            _carryFlag = false;
+            HalfCarryFlag = false;
+            ZeroFlag = _a == 0;
+            SubstractFlag = false;
+            CarryFlag = false;
 
             _lastOpTime = 8;
             // TODO : Set flags Z, N, H, C
@@ -134,9 +134,9 @@ namespace Emulator.GB.Core
 
         protected void TestBit(int bitPos, byte value)
         {
-            _fz = ((value >> bitPos) & 0x1) == 0;
-            _fn = false;
-            _fh = true;
+            ZeroFlag = ((value >> bitPos) & 0x1) == 0;
+            SubstractFlag = false;
+            HalfCarryFlag = true;
 
             _lastOpTime = 8;
         }
@@ -204,9 +204,9 @@ namespace Emulator.GB.Core
         protected void Increment(ref byte register)
         {
             register++;
-            _fh = register > 0x0F;
-            _fn = false;
-            _fz = register == 0;
+            HalfCarryFlag = register > 0x0F;
+            SubstractFlag = false;
+            ZeroFlag = register == 0;
             _lastOpTime = 4;
         }
 
@@ -230,10 +230,10 @@ namespace Emulator.GB.Core
         protected void Decrement(ref byte register)
         {
             register--;
-            _fh = (register & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            HalfCarryFlag = (register & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
             _lastOpTime = 4;
-            _fn = true;
-            _fz = register == 0;
+            SubstractFlag = true;
+            ZeroFlag = register == 0;
         }
 
         protected void Decrement(ref byte h, ref byte l)
@@ -255,12 +255,13 @@ namespace Emulator.GB.Core
         {
             int localA = register + _a;
 
+            HalfCarryFlag = ((_a & 0x0F) + (register & 0x0F)) > 0x0F;
+
             _a = (byte)(localA & 0xFF);
 
-            _carryFlag = localA > 0xFF;
-            _fh = (_a & 0x0F + register & 0x0F) > 0x0F;
-            _fn = false;
-            _fz = _a == 0;
+            CarryFlag = localA > 0xFF;
+            SubstractFlag = false;
+            ZeroFlag = _a == 0;
             _lastOpTime = 4;
         }
 
@@ -269,12 +270,13 @@ namespace Emulator.GB.Core
             var value = MMU.ReadByte(HL);
             int localA = value + _a;
 
+            HalfCarryFlag = ((_a & 0x0F) + (value & 0x0F)) > 0x0F;
+
             _a = (byte)(localA & 0xFF);
 
-            _carryFlag = localA > 0xFF;
-            _fh = (_a & 0x0F + value & 0x0F) > 0x0F;
-            _fn = false;
-            _fz = _a == 0;
+            CarryFlag = localA > 0xFF;
+            SubstractFlag = false;
+            ZeroFlag = _a == 0;
             _lastOpTime = 8;
         }
 
@@ -282,32 +284,32 @@ namespace Emulator.GB.Core
         {
             var value = MMU.ReadByte(PC++);
             int localA = value + _a;
+            HalfCarryFlag = ((_a & 0x0F) + (value & 0x0F)) > 0x0F;
 
             _a = (byte)(localA & 0xFF);
 
-            _carryFlag = localA > 0xFF;
-            _fh = (_a & 0x0F + value & 0x0F) > 0x0F;
-            _fn = false;
-            _fz = _a == 0;
+            CarryFlag = localA > 0xFF;
+            SubstractFlag = false;
+            ZeroFlag = _a == 0;
             _lastOpTime = 8;
         }
 
         protected void Sub(byte register)
         {
             _a -= register;
-            _fh = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            HalfCarryFlag = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
             _lastOpTime = 4;
-            _fn = true;
-            _fz = _a == 0;
+            SubstractFlag = true;
+            ZeroFlag = _a == 0;
         }
 
         protected void SubFromAddress(int address)
         {
             var value = _mmu.ReadByte(address);
             _a -= value;
-            _fh = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
-            _fn = true;
-            _fz = _a == 0;
+            HalfCarryFlag = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            SubstractFlag = true;
+            ZeroFlag = _a == 0;
 
             _lastOpTime = 8;
         }
@@ -316,9 +318,9 @@ namespace Emulator.GB.Core
         {
             var value = _mmu.ReadByte(PC++);
             _a -= value;
-            _fh = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
-            _fn = true;
-            _fz = _a == 0;
+            HalfCarryFlag = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            SubstractFlag = true;
+            ZeroFlag = _a == 0;
 
             _lastOpTime = 8;
         }
@@ -382,10 +384,10 @@ namespace Emulator.GB.Core
         {
             var value =_a - register;
 
-            _fz = value == 0;
-            _fn = true;
-            _fh = (value & 0x0F) == 0x0F;
-            _carryFlag = value < 0;
+            ZeroFlag = value == 0;
+            SubstractFlag = true;
+            HalfCarryFlag = (value & 0x0F) == 0x0F;
+            CarryFlag = value < 0;
 
             _lastOpTime = 4;
         }
@@ -395,10 +397,10 @@ namespace Emulator.GB.Core
             var register = _mmu.ReadByte(hl);
             var value = _a - register;
 
-            _fz = value == 0;
-            _fn = true;
-            _fh = (value & 0x0F) == 0x0F;
-            _carryFlag = value < 0;
+            ZeroFlag = value == 0;
+            SubstractFlag = true;
+            HalfCarryFlag = (value & 0x0F) == 0x0F;
+            CarryFlag = value < 0;
             _lastOpTime = 8;
 
         }
@@ -408,10 +410,10 @@ namespace Emulator.GB.Core
             var register = _mmu.ReadByte(PC++);
             var value = _a - register;
 
-            _fz = value == 0;
-            _fn = true;
-            _fh = (value & 0x0F) == 0x0F;
-            _carryFlag = value < 0;
+            ZeroFlag = value == 0;
+            SubstractFlag = true;
+            HalfCarryFlag = (value & 0x0F) == 0x0F;
+            CarryFlag = value < 0;
 
             _lastOpTime = 8;
 
