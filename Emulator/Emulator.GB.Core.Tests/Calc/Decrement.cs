@@ -6,15 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Emulator.GB.Core.Tests
 {
     [TestClass]
-    public class Decrement
+    public class Decrement : BaseTest
     {
-        private ICpu _cpu;
-
-        public Decrement()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         private void Dec8BitsTest(Expression<Func<ICpu, byte>> expr, int opCode)
         {
@@ -44,7 +37,7 @@ namespace Emulator.GB.Core.Tests
             Assert.AreEqual(true, _cpu.SubstractFlag);
             Assert.AreEqual(true, _cpu.HalfCarryFlag);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
 
         }
 
@@ -102,7 +95,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x41, _cpu.BC);
         }
 
@@ -115,7 +108,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x41, _cpu.DE);
         }
 
@@ -128,7 +121,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x41, _cpu.HL);
 
             _cpu.SetRegister<ushort>(c => c.HL, 0x0100);
@@ -149,7 +142,7 @@ namespace Emulator.GB.Core.Tests
             _cpu.Exec(opcode);
             Assert.AreEqual(0xFF, _cpu.SP);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
         }
     }
 }

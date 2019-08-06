@@ -47,7 +47,7 @@ namespace Emulator.GB.Interfaces
 
         IMMU MMU { get; }
 
-        int LastOpTime { get; }
+        int LastInstructionClockTime { get; }
         void Exec(int opCode);
         void ExecExtOpCode(int extOpCode);
 

@@ -36,7 +36,7 @@ namespace Emulator.GB.Core.Tests.Misc
             Assert.AreEqual(true, _cpu.SubstractFlag);
             Assert.AreEqual(false, _cpu.CarryFlag);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
 
         }
 
@@ -122,7 +122,7 @@ namespace Emulator.GB.Core.Tests.Misc
             Assert.AreEqual(true, _cpu.SubstractFlag);
             Assert.AreEqual(true, _cpu.CarryFlag);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
         }
 
 

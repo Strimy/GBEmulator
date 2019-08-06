@@ -11,17 +11,23 @@ namespace Emulator.GB.Core
 {
     public partial class CPU : ICpu
     {
+        public uint ClockFrequency => 4194304;
+        public decimal ClockFrequencyMhz => 4.194304M;
+        public decimal LastInstructionMicroSec => 1.0M / ClockFrequencyMhz * _lastOpTime;
+        public int LastInstructionClockTime => (int)_lastOpTime;
+
         #region Private Fields
-        private int _lastOpTime;
+        private uint _lastOpTime;
         private IMMU _mmu;
         private byte _a, _b, _c, _d, _e, _h, _f, _l;
         private bool _interruptsEnabled;
         private uint _intructionsCounter = 0;
         private int _lastOpCode;
-        private int _previousPC;
-        private uint _instructionTime;
+        private GPU _gpu;
 
         #endregion
+
+        public IGpu GPU => _gpu;
 
         #region Registers
         public byte A
@@ -212,8 +218,10 @@ namespace Emulator.GB.Core
         private Action[] _opCodes = new Action[0xFF];
         private Action[] _opCodesExt = new Action[0xFF];
 
+        public uint InstructionsCount => _intructionsCounter;
 
-        public int LastOpTime
+
+        public uint LastOpTime
         {
             get
             {
@@ -256,8 +264,9 @@ namespace Emulator.GB.Core
             }
         }
 
-        public CPU()
+        public CPU(GPU gpu)
         {
+            _gpu = gpu;
             InitializeOpCodes();
         }
 
@@ -283,14 +292,13 @@ namespace Emulator.GB.Core
                 else
                     _opCodes[opCode]();
 
-                _instructionTime = (uint)_lastOpTime;
-
+                _gpu.Step(_lastOpTime);
             }
             catch (Exception e)
             {
                 throw new InvalidOperationException($"CPU thrown an exception with state : \n" +
-                                                $"OP Code: {opCode:X} - Ext : {extOpCode:X} \n" +
-                                                $"PC: {PC} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n"+
+                                                $"OP Code: 0x{opCode:X} - Ext : {extOpCode:X} \n" +
+                                                $"PC: 0x{PC-1:X} \n A: {A} \n B: {B} \n C: {C}\n D: {D}\n E: {E}\n"+
                                                 $"Instructions run : {_intructionsCounter}", e);
             }
         }
@@ -350,6 +358,7 @@ namespace Emulator.GB.Core
         public void SetMMU(IMMU mmu)
         {
             _mmu = mmu;
+            _mmu.SetGPU(_gpu);
         }
 
         public void SetRegister<T>(Expression<Func<ICpu, T>> inExpr, T value) where T : struct

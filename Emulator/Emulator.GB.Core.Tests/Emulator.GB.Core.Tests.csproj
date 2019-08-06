@@ -68,6 +68,8 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Bits\TestXor.cs" />
+    <Compile Include="Calc\Add.cs" />
+    <Compile Include="Calc\Sub.cs" />
     <Compile Include="Calc\Decrement.cs" />
     <Compile Include="Bits\TestBitB.cs" />
     <Compile Include="Bits\TestBitC.cs" />

@@ -6,15 +6,9 @@ using System.Linq.Expressions;
 namespace Emulator.GB.Core.Tests.Load
 {
     [TestClass]
-    public class LD8bits
+    public class LD8bits : BaseTest
     {
-        private ICpu _cpu;
 
-        public LD8bits()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         [TestMethod]
         public void LD_An()
@@ -23,7 +17,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x3E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.A);
         }
 
@@ -34,7 +28,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x06);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.B);
         }
 
@@ -45,7 +39,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x0E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.C);
         }
 
@@ -56,7 +50,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x16);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.D);
         }
 
@@ -67,7 +61,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x1E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.E);
         }
 
@@ -79,7 +73,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x26);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.H);
         }
 
@@ -90,7 +84,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x2E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, _cpu.L);
         }
     }

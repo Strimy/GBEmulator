@@ -45,6 +45,11 @@ namespace Emulator.GB.Core.Tests
 
         }
 
+        public void SetGPU(IGpu gpu)
+        {
+            
+        }
+
         public void WriteByte(int address, byte value)
         {
             _mapWrittenAddress[address] = value;

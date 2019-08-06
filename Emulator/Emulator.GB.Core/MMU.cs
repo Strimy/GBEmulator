@@ -9,7 +9,12 @@ namespace Emulator.GB.Core
     {
         private byte[] _highRam = new byte[127];
         private ICartridge _cartridge;
-        private GPU _gpu = new GPU();
+        private IGpu _gpu;
+
+        public void SetGPU(IGpu gpu)
+        {
+            _gpu = gpu;
+        }
 
         public byte ReadByte(int address)
         {

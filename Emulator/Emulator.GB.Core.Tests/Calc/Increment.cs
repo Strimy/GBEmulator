@@ -5,16 +5,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Emulator.GB.Core.Tests
 {
     [TestClass]
-    public class Increment
+    public class Increment : BaseTest
     {
-        private ICpu _cpu;
-
-        public Increment()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
-
         [TestMethod]
         public void TestIncA()
         {
@@ -24,7 +16,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.A);
         }
 
@@ -37,7 +29,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.B);
         }
 
@@ -49,7 +41,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.C);
         }
 
@@ -62,7 +54,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.D);
         }
 
@@ -75,7 +67,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.E);
         }
 
@@ -88,7 +80,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.H);
         }
 
@@ -101,7 +93,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.L);
         }
 
@@ -115,7 +107,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.BC);
 
             // High case
@@ -123,7 +115,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x4300, _cpu.BC);
         }
 
@@ -136,7 +128,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.DE);
 
             // High case
@@ -144,7 +136,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x4300, _cpu.DE);
         }
 
@@ -157,7 +149,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.HL);
 
             // High case
@@ -165,7 +157,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x4300, _cpu.HL);
         }
 
@@ -178,7 +170,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x43, _cpu.SP);
 
             // High case
@@ -186,7 +178,7 @@ namespace Emulator.GB.Core.Tests
 
             _cpu.Exec(opcode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x4300, _cpu.SP);
         }
     }

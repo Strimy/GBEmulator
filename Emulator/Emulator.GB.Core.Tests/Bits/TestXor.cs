@@ -6,14 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Emulator.GB.Core.Tests.Bits
 {
     [TestClass]
-    public class TestXor
+    public class TestXor : BaseTest
     {
-        protected ICpu _cpu;
-        public TestXor()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         private void XorTest(Expression<Func<ICpu, byte>> expr, int opCode)
         {
@@ -43,7 +37,7 @@ namespace Emulator.GB.Core.Tests.Bits
             Assert.AreEqual(false, _cpu.HalfCarryFlag);
 
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
 
         }
 

@@ -6,15 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Emulator.GB.Core.Tests
 {
     [TestClass]
-    public class Rotate
+    public class Rotate : BaseTest
     {
-        private ICpu _cpu;
-
-        public Rotate()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         private void RLTest(Expression<Func<ICpu, byte>> expr, int opCodeExt)
         {
@@ -55,7 +48,7 @@ namespace Emulator.GB.Core.Tests
             Assert.AreEqual(false, _cpu.CarryFlag);
             Assert.AreEqual(false, _cpu.HalfCarryFlag);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
 
         }
         
@@ -112,7 +105,7 @@ namespace Emulator.GB.Core.Tests
 
             Assert.AreEqual(0x32 * 2, _cpu.MMU.ReadByte(0x4242));
 
-            Assert.AreEqual(16, _cpu.LastOpTime, "Bad op time");
+            Assert.AreEqual(16, _cpu.LastInstructionClockTime, "Bad op time");
 
         }
     }

@@ -13,7 +13,7 @@ namespace Emulator.GB.Core.Tests
 
         public BaseTest()
         {
-            _cpu = new CPU();
+            _cpu = new CPU(new GPU());
             _cpu.SetMMU(new AddressReturnedMMU());
         }
     }

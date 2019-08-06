@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Emulator.GB.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Emulator.GB.Core
 {
-    public class GPU
+    public class GPU : IGpu
     {
         private byte[] _vram = new byte[0x2000];
         private byte[] _io = new byte[0x7F];
+        private uint _modeClock = 0;
 
         public byte[] VRam => _vram;
 
@@ -23,21 +25,61 @@ namespace Emulator.GB.Core
             }
         }
 
-        public byte STAT
+        public STAT STAT
         {
             get
             {
-                return _io[0x41];
+                return (STAT)_io[0x41];
             }
             set
             {
-                _io[0x41] = value;
+                _io[0x41] = (byte)value;
             }
         }
 
+        public byte this[GPURegister register]
+        {
+            get
+            {
+                return _io[(byte)register];
+            }
+            set
+            {
+                _io[(byte)register] = value;
+            }
+        }
+
+        public byte LY
+        {
+            get
+            {
+                return _io[(byte)GPURegister.LY];
+            }
+            set
+            {
+                _io[(byte)GPURegister.LY] = value;
+            }
+        }
+        public byte LYC => _io[(byte)GPURegister.LYC];
+
+        public GPUMode Mode
+        {
+            get
+            {
+                var statByte = (byte)STAT;
+                return (GPUMode)(byte)(statByte & 0x03);
+            }
+            set
+            {
+                _modeClock = 0;
+                STAT = (STAT)(((byte)STAT & 0b1111_1100) ^ (byte)value);
+            }
+        }
+
+
         public byte ReadByte(int address)
         {
-            GPURegister localAddress = (GPURegister)(address - 0xFF00); 
+            GPURegister localAddress = (GPURegister)(address - 0xFF00);
 
             return _io[(byte)localAddress];
         }
@@ -48,30 +90,76 @@ namespace Emulator.GB.Core
 
             _io[(byte)localAddress] = value;
         }
+
+        internal void Step(uint instructionTime)
+        {
+            _modeClock += instructionTime;
+
+            GPUMode mode = Mode;
+
+            switch (mode)
+            {
+                case GPUMode.Mode0: // HBlank
+                    Mode0();
+                    break;
+                case GPUMode.Mode1: // VBlank
+                    Mode1();
+                    break;
+                case GPUMode.Mode2: // OAM
+                    Mode2();
+                    break;
+                case GPUMode.Mode3: // LCD Transfer
+                    Mode3();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Mode2()
+        {
+            if (_modeClock >= 80)
+            {
+                Mode = GPUMode.Mode3;
+            }
+        }
+
+        private void Mode3()
+        {
+            if (_modeClock >= 172)
+            {
+                Mode = GPUMode.Mode0;
+            }
+        }
+
+        private void Mode1()
+        {
+            var line = _modeClock % 456;
+
+            LY = (byte)(144 + line);
+
+            if (_modeClock >= 4560)
+            {
+                Mode = GPUMode.Mode2;
+                LY = 0;
+            }
+        }
+
+        private void Mode0()
+        {
+            if (_modeClock >= 204)
+            {
+                var y = LY++;
+                if (LY > 143)
+                {
+                    Mode = GPUMode.Mode1;
+#warning Manage VBlank interrupt ?
+                }
+                else
+                    Mode = GPUMode.Mode2;
+            }
+        }
     }
 
-    public enum GPURegister : byte
-    {
-        LDLC = 0x40,
-        STAT = 0x41,
-        SCY = 0x42,
-        SCX = 0x43,
-        LY = 0x44,
-        LYC = 0x45,
-        WY = 0x4A,
-        WX = 0x4B,
-    }
 
-    [Flags]
-    public enum STAT : byte
-    {
-        Mode2OAM = 0b0010_0000,
-        Mode1VBlank = 0b0001_0000,
-        Mode0HBlank = 0b0000_1000,
-        Coincidence = 0b0000_0100,
-        Mode0 = 0b0000_0000, // HBlank
-        Mode1 = 0b0000_0001, // Vblank
-        Mode2 = 0b0000_0010, // OAM Search
-        Mode3 = 0b0000_0011, // LCD Transfer
-    }
 }

@@ -19,5 +19,6 @@ namespace Emulator.GB.Interfaces
         void WriteWord(int address, int value);
 
         void SetCartridge(ICartridge cartridge);
+        void SetGPU(IGpu gpu);
     }
 }

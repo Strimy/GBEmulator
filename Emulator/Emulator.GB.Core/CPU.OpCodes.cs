@@ -251,6 +251,78 @@ namespace Emulator.GB.Core
             _lastOpTime = 8;
         }
 
+        protected void Add(byte register)
+        {
+            int localA = register + _a;
+
+            _a = (byte)(localA & 0xFF);
+
+            _carryFlag = localA > 0xFF;
+            _fh = (_a & 0x0F + register & 0x0F) > 0x0F;
+            _fn = false;
+            _fz = _a == 0;
+            _lastOpTime = 4;
+        }
+
+        protected void AddFromHL()
+        {
+            var value = MMU.ReadByte(HL);
+            int localA = value + _a;
+
+            _a = (byte)(localA & 0xFF);
+
+            _carryFlag = localA > 0xFF;
+            _fh = (_a & 0x0F + value & 0x0F) > 0x0F;
+            _fn = false;
+            _fz = _a == 0;
+            _lastOpTime = 8;
+        }
+
+        protected void AddFromImmediate()
+        {
+            var value = MMU.ReadByte(PC++);
+            int localA = value + _a;
+
+            _a = (byte)(localA & 0xFF);
+
+            _carryFlag = localA > 0xFF;
+            _fh = (_a & 0x0F + value & 0x0F) > 0x0F;
+            _fn = false;
+            _fz = _a == 0;
+            _lastOpTime = 8;
+        }
+
+        protected void Sub(byte register)
+        {
+            _a -= register;
+            _fh = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            _lastOpTime = 4;
+            _fn = true;
+            _fz = _a == 0;
+        }
+
+        protected void SubFromAddress(int address)
+        {
+            var value = _mmu.ReadByte(address);
+            _a -= value;
+            _fh = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            _fn = true;
+            _fz = _a == 0;
+
+            _lastOpTime = 8;
+        }
+
+        protected void SubFromImmediate()
+        {
+            var value = _mmu.ReadByte(PC++);
+            _a -= value;
+            _fh = (_a & 0x0F) == 0x0F; // Not sure how the Half carry flag is working
+            _fn = true;
+            _fz = _a == 0;
+
+            _lastOpTime = 8;
+        }
+
         protected void Call()
         {
             SP -= 2;

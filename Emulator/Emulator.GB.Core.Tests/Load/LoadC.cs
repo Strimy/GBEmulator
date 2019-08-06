@@ -5,15 +5,8 @@ using Emulator.GB.Interfaces;
 namespace Emulator.GB.Core.Tests.Load
 {
     [TestClass]
-    public class LoadC
+    public class LoadC : BaseTest
     {
-        private ICpu _cpu;
-
-        public LoadC()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         [TestMethod]
         public void TestLoadAFromC()
@@ -21,7 +14,7 @@ namespace Emulator.GB.Core.Tests.Load
             _cpu.SetRegister(c => c.C, (byte)0x42);
             _cpu.Exec(0xF2);
 
-            Assert.AreEqual(_cpu.LastOpTime, 8);
+            Assert.AreEqual(_cpu.LastInstructionClockTime, 8);
             Assert.AreEqual(_cpu.A, 0x42 ^ 0xFF);
         }
 
@@ -32,7 +25,7 @@ namespace Emulator.GB.Core.Tests.Load
             _cpu.SetRegister(c => c.A, (byte)0x51);
             _cpu.Exec(0xE2);
 
-            Assert.AreEqual(_cpu.LastOpTime, 8);
+            Assert.AreEqual(_cpu.LastInstructionClockTime, 8);
             Assert.AreEqual(_cpu.MMU.ReadByte(0xFF00 | 0x42), 0x51);
         }
     }

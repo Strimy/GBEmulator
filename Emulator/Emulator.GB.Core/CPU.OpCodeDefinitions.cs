@@ -23,6 +23,7 @@ namespace Emulator.GB.Core
                 _opCodesExt[i] = () => { throw new NotImplementedException("OPCode Ext not implemented CB " + opCode); };
             }
 
+            _opCodes[0] = () => { _lastOpTime = 4; };
             InitIncrement();
             InitDecrement();
             InitLoad8Bits();
@@ -43,6 +44,8 @@ namespace Emulator.GB.Core
             InitReturn();
             InitRL();
             InitCP();
+            InitSub();
+            InitAdd();
 
             _opCodes[0xCD] = Call;
         }
@@ -122,6 +125,34 @@ namespace Emulator.GB.Core
             _opCodes[0x1B] = () => Decrement(ref _d, ref _e);
             _opCodes[0x3B] = () => Decrement(ref _sp);
 
+        }
+
+        private void InitAdd()
+        {
+            _opCodes[0x87] = () => Add(_a);
+            _opCodes[0x80] = () => Add(_b);
+            _opCodes[0x81] = () => Add(_c);
+            _opCodes[0x82] = () => Add(_d);
+            _opCodes[0x83] = () => Add(_e);
+            _opCodes[0x84] = () => Add(_h);
+            _opCodes[0x85] = () => Add(_l);
+
+            _opCodes[0x86] = AddFromHL;
+            _opCodes[0xC6] = AddFromImmediate;
+        }
+
+        private void InitSub()
+        {
+            _opCodes[0x97] = () => Sub(_a);
+            _opCodes[0x90] = () => Sub(_b);
+            _opCodes[0x91] = () => Sub(_c);
+            _opCodes[0x92] = () => Sub(_d);
+            _opCodes[0x93] = () => Sub(_e);
+            _opCodes[0x94] = () => Sub(_h);
+            _opCodes[0x95] = () => Sub(_l);
+
+            _opCodes[0x96] = () => SubFromAddress(HL);
+            _opCodes[0xD6] = SubFromImmediate;
         }
 
         private void InitMisc()

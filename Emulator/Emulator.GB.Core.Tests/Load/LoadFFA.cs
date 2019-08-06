@@ -5,15 +5,9 @@ using Emulator.GB.Interfaces;
 namespace Emulator.GB.Core.Tests.Load
 {
     [TestClass]
-    public class LoadFFA
+    public class LoadFFA : BaseTest
     {
-        private ICpu _cpu;
 
-        public LoadFFA()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         [TestMethod]
         public void TestLoadAFromFFImmediate()
@@ -23,7 +17,7 @@ namespace Emulator.GB.Core.Tests.Load
             _cpu.SetRegister(c => c.PC, (byte)0x42);
             _cpu.Exec(0xF0);
 
-            Assert.AreEqual(_cpu.LastOpTime, 12);
+            Assert.AreEqual(_cpu.LastInstructionClockTime, 12);
             Assert.AreEqual(_cpu.A, 0x51);
         }
 
@@ -34,7 +28,7 @@ namespace Emulator.GB.Core.Tests.Load
             _cpu.SetRegister(c => c.PC, (byte)0x42);
             _cpu.Exec(0xE0);
 
-            Assert.AreEqual(_cpu.LastOpTime, 12);
+            Assert.AreEqual(_cpu.LastInstructionClockTime, 12);
             Assert.AreEqual(_cpu.MMU.ReadByte(0xFF42), 0x51);
         }
     }

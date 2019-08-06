@@ -10,15 +10,9 @@ using System.Threading.Tasks;
 namespace Emulator.GB.Core.Tests.Load
 {
     [TestClass]
-    public class LDAddressTest
+    public class LDAddressTest : BaseTest
     {
-        private ICpu _cpu;
 
-        public LDAddressTest()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         [TestMethod]
         public void LD_AA()
@@ -69,7 +63,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x0A);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.A);
         }
 
@@ -80,7 +74,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x1A);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.A);
         }        
 
@@ -91,7 +85,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x7E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.A);            
         }
 
@@ -144,7 +138,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x46);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.B);
         }
 
@@ -197,7 +191,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x4E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.C);
         }
 
@@ -250,7 +244,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x56);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.D);
         }
 
@@ -303,7 +297,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x5E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.E);
         }
 
@@ -356,7 +350,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x66);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.H);
         }
 
@@ -410,7 +404,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x6E);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x70 ^ 0x08, _cpu.L);
         }        
 
@@ -422,7 +416,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x70);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
         }
 
@@ -434,7 +428,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x71);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
         }
 
@@ -446,7 +440,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x72);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
         }
 
@@ -458,7 +452,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x73);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
         }
 
@@ -470,7 +464,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x74);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
         }
 
@@ -482,7 +476,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x75);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
         }
 
@@ -494,7 +488,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(0x36);
 
-            Assert.AreEqual(12, _cpu.LastOpTime);
+            Assert.AreEqual(12, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(_cpu.HL));
             Assert.AreEqual(0x39, _cpu.PC);
         }
@@ -553,13 +547,13 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(opCode);
 
-            Assert.AreEqual(8, _cpu.LastOpTime);
+            Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x38, _cpu.MMU.ReadByte(targetRegisterAddress.Compile()(_cpu)));
         }
 
         private void CheckOpTime(int time)
         {
-            Assert.AreEqual(time, _cpu.LastOpTime);
+            Assert.AreEqual(time, _cpu.LastInstructionClockTime);
         }
 
         private void TestRegisterLoad(int opCode, Expression<Func<ICpu, byte>> source, Func<byte> target)
@@ -568,7 +562,7 @@ namespace Emulator.GB.Core.Tests.Load
 
             _cpu.Exec(opCode);
 
-            Assert.AreEqual(4, _cpu.LastOpTime);
+            Assert.AreEqual(4, _cpu.LastInstructionClockTime);
             Assert.AreEqual(0x42, target());
         }
     }

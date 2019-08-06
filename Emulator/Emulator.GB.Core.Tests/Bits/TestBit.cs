@@ -6,17 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Emulator.GB.Core.Tests.Bits
 {
     [TestClass]
-    public abstract class TestBit
+    public abstract class TestBit : BaseTest
     {
-        protected ICpu _cpu;
-
         protected abstract Expression<Func<ICpu, byte>> GetRegisterExpression { get; }
 
-        public TestBit()
-        {
-            _cpu = new CPU();
-            _cpu.SetMMU(new AddressReturnedMMU());
-        }
 
         protected void RunBitTest(int bitPos, int opCodeExt)
         {
@@ -30,7 +23,7 @@ namespace Emulator.GB.Core.Tests.Bits
                 Assert.AreNotEqual(result, _cpu.ZeroFlag);
                 Assert.AreEqual(false, _cpu.SubstractFlag);
                 Assert.AreEqual(true, _cpu.HalfCarryFlag);
-                Assert.AreEqual(8, _cpu.LastOpTime);
+                Assert.AreEqual(8, _cpu.LastInstructionClockTime);
             }
 
 
