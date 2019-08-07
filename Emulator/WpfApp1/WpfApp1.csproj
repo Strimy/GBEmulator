@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="opus5.gb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="opus5.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Emulator.GB.Core\Emulator.GB.Core.csproj" />
+    <ProjectReference Include="..\Emulator.GB.Interfaces\Emulator.GB.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

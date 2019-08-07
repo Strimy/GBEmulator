@@ -353,7 +353,7 @@ namespace Emulator.GB.Core
 
         public byte FetchNextOpCode()
         {
-            return _mmu.ReadByte(PC++);
+            return _mmu.ReadByte(_pc++);
         }
 
         /// <summary>

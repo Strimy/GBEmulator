@@ -4,6 +4,7 @@ using Emulator.GB.Core;
 using Emulator.GB.Core.Cartridge;
 using System.IO;
 using Emulator.GB.Interfaces;
+using System.Diagnostics;
 
 namespace Emulator.GB.Core.Tests.Run
 {
@@ -13,6 +14,7 @@ namespace Emulator.GB.Core.Tests.Run
         [TestMethod]
         public void RunBios()
         {
+
             CPU cpu = new CPU(new GPU());
             MMU mmu = new MMU();
             var rom = new ROM();
@@ -20,16 +22,23 @@ namespace Emulator.GB.Core.Tests.Run
             rom.LoadROM(File.ReadAllBytes("opus5.gb"));
             mmu.SetCartridge(rom);
             cpu.SetMMU(mmu);
-
-            while (cpu.PC < 0xFF)
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            try
             {
-                cpu.Step();
-
-                if(cpu.InstructionsCount > 10000000)
+                while (true)
                 {
-                    Assert.Fail("Boot time exceeded");
+                    cpu.Step();
                 }
             }
+            catch(Exception e)
+            {
+
+            }
+
+            sw.Stop();
+
+            Console.WriteLine(sw.ElapsedMilliseconds);
 
             Assert.AreEqual(0x1, cpu.A);
             Assert.AreEqual(0xB0, cpu.F);
@@ -68,6 +77,7 @@ namespace Emulator.GB.Core.Tests.Run
             Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF43));
             Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF45));
             Assert.AreEqual(0xFC, cpu.MMU.ReadByte(0xFF47));
+
             Assert.AreEqual(0xFF, cpu.MMU.ReadByte(0xFF48));
             Assert.AreEqual(0xFF, cpu.MMU.ReadByte(0xFF49));
             Assert.AreEqual(0x00, cpu.MMU.ReadByte(0xFF4A));

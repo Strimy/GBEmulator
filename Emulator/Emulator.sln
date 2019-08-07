@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25618.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.89
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GB.Core", "Emulator.GB.Core\Emulator.GB.Core.csproj", "{CA39D0D1-763D-436E-99EF-9D59E0CE532A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.GB.Core", "Emulator.GB.Core\Emulator.GB.Core.csproj", "{CA39D0D1-763D-436E-99EF-9D59E0CE532A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GB.Core.Tests", "Emulator.GB.Core.Tests\Emulator.GB.Core.Tests.csproj", "{CFFF64E4-0F0B-4BC4-82FC-CAD9FC3307BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GB.Interfaces", "Emulator.GB.Interfaces\Emulator.GB.Interfaces.csproj", "{CD73C027-BC7D-442D-BEF7-36FCE13827B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.GB.Interfaces", "Emulator.GB.Interfaces\Emulator.GB.Interfaces.csproj", "{CD73C027-BC7D-442D-BEF7-36FCE13827B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4481EBC2-0473-463C-96B6-B57008415C92}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4481EBC2-0
 		Docs\GBCPUman.pdf = Docs\GBCPUman.pdf
 		Docs\GBCribSheet000129.pdf = Docs\GBCribSheet000129.pdf
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{51BDE30C-41E5-4676-B1F0-BF7B8FBCC97E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{CD73C027-BC7D-442D-BEF7-36FCE13827B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD73C027-BC7D-442D-BEF7-36FCE13827B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD73C027-BC7D-442D-BEF7-36FCE13827B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51BDE30C-41E5-4676-B1F0-BF7B8FBCC97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51BDE30C-41E5-4676-B1F0-BF7B8FBCC97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51BDE30C-41E5-4676-B1F0-BF7B8FBCC97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51BDE30C-41E5-4676-B1F0-BF7B8FBCC97E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
