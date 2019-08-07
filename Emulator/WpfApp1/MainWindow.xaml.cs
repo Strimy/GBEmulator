@@ -95,8 +95,8 @@ namespace WpfApp1
             for (int i = 0; i < 8; i++)
             {
                 List<Rectangle> line = new List<Rectangle>();
-                var lineDataL = data[i];
-                var lineDataH = data[i+1];
+                var lineDataL = data[i*2];
+                var lineDataH = data[i*2+1];
 
                 for (int j = 0; j < 8; j++)
                 {

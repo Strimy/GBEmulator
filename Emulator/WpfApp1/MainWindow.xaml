@@ -16,7 +16,7 @@
             <ItemsControl x:Name="bgTiles" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <ItemsControl Margin="5" ItemsSource="{Binding Pixels}">
+                        <ItemsControl Margin="0" ItemsSource="{Binding Pixels}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <ItemsControl ItemsSource="{Binding}" >
