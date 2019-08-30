@@ -93,7 +93,8 @@ namespace Emulator.GB.Core.Tests.Run
             CPU cpu = new CPU(new GPU());
             MMU mmu = new MMU();
             var rom = new ROM();
-
+            cpu.GPU.LCDC = LCDC.LCDEnable;
+            cpu.GPU.Mode = GPUMode.Mode0;
 
             decimal timeSpentMicroSec = 0;
 
@@ -122,7 +123,7 @@ namespace Emulator.GB.Core.Tests.Run
                         Assert.Fail("GPU Mode should transition from Mode0 to Mode2");
                 }
 
-                if (cpu.InstructionsCount > 10000)
+                if (cpu.InstructionsCount > 100000)
                     Assert.Fail("GPU did not changed to correct state");
             }
         }
@@ -133,6 +134,7 @@ namespace Emulator.GB.Core.Tests.Run
             CPU cpu = new CPU(new GPU());
             MMU mmu = new MMU();
             var rom = new ROM();
+            cpu.GPU.LCDC = LCDC.LCDEnable;
 
 
             decimal timeSpentMicroSec = 0;
@@ -178,6 +180,7 @@ namespace Emulator.GB.Core.Tests.Run
             CPU cpu = new CPU(new GPU());
             MMU mmu = new MMU();
             var rom = new ROM();
+            cpu.GPU.LCDC = LCDC.LCDEnable;
 
 
             decimal timeSpentMicroSec = 0;
@@ -223,6 +226,7 @@ namespace Emulator.GB.Core.Tests.Run
             CPU cpu = new CPU(new GPU());
             MMU mmu = new MMU();
             var rom = new ROM();
+            cpu.GPU.LCDC = LCDC.LCDEnable;
 
 
             decimal timeSpentMicroSec = 0;

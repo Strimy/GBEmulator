@@ -114,7 +114,7 @@ namespace Emulator.GB.Core
                 if (LCDC.HasFlag(LCDC.TileDataSelect))
                     return VRamTiles.Slice(0, 0x1000 / 16);
                 else
-                    return VRamTiles.Slice(0x0800, 0x1000 / 16);
+                    return VRamTiles.Slice(0x0800 / 16, 0x1000 / 16);
             }
         }
 
