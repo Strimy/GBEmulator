@@ -54,7 +54,7 @@ namespace Emulator.GB.Core.Tests.Misc
 
             _cpu.Exec(0xC3);
 
-            Assert.AreEqual(0x5455, _cpu.PC);
+            Assert.AreEqual(0x5453, _cpu.PC);
         }
     }
 }

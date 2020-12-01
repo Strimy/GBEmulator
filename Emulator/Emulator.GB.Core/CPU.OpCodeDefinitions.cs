@@ -167,6 +167,7 @@ namespace Emulator.GB.Core
             _opCodes[0x28] = JmpZ;
             _opCodes[0x30] = JmpNC;
             _opCodes[0x38] = JmpC;
+            _opCodes[0xC3] = JumpImmediate;
         }
 
         private void InitExtentedOpCodes()

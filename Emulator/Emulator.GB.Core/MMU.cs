@@ -7,7 +7,7 @@ namespace Emulator.GB.Core
 {
     public partial class MMU : IMMU
     {
-        private byte[] _highRam = new byte[127];
+        private byte[] _highRam = new byte[128];
         private byte[] _lowRam = new byte[0xDFFF-0xC000];
         private ICartridge _cartridge;
         private IGpu _gpu;
@@ -20,7 +20,7 @@ namespace Emulator.GB.Core
 
         public byte ReadByte(int address)
         {
-            if(address < 256)
+            if(address < 0XFF)
             {
                 return _bios[address];
             }

@@ -151,7 +151,6 @@ namespace Emulator.GB.Core
             {
                 PC++;
             }
-            _lastOpTime = 8;
         }
 
         protected void JmpZ()
@@ -164,7 +163,6 @@ namespace Emulator.GB.Core
             {
                 PC++;
             }
-            _lastOpTime = 8;
         }
 
         protected void JmpNC()
@@ -177,7 +175,6 @@ namespace Emulator.GB.Core
             {
                 PC++;
             }
-            _lastOpTime = 8;
         }
 
         protected void JmpC()
@@ -190,7 +187,6 @@ namespace Emulator.GB.Core
             {
                 PC++;
             }
-            _lastOpTime = 8;
         }
 
 
@@ -199,6 +195,15 @@ namespace Emulator.GB.Core
             var realValue = _mmu.ReadByte(PC++);
             sbyte offset = (sbyte)realValue;
             PC += offset;
+            _lastOpTime = 8;
+        }
+
+        protected void JumpImmediate()
+        {
+            var realValue = _mmu.ReadWord(PC++);
+            PC = realValue;
+
+            _lastOpTime = 12;
         }
 
         protected void Increment(ref byte register)
